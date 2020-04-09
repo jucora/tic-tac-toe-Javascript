@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: sans-serif;
+}
+.row {
+  display: flex;
+  justify-content: center;
+}
+.cell {
+  align-items: center;
+  background-color: brown;
+  border: 3px solid gray;
+  display: flex;
+  font-size: 100px;
+  height: 300px;
+  justify-content: center;
+  width: 500px;
+}
+.cell:hover {
+  background-color: cyan;
+  cursor: pointer;
+}
