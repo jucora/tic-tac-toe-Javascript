@@ -4,7 +4,24 @@
 }
 body {
   font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  background-image: url("../images/level1.jpg"); /*, url(star1.png), url(star2.png);*/
+  background-size: cover;
+  background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
+  background-repeat: repeat-x; /*, repeat-x, repeat-x;*/
+  animation: animate-background linear 10s infinite;
 }
+@keyframes animate-background {
+  from {
+    background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
+  }
+  to {
+    background-position: -200% 0px, -1000px 0px, -500px 0px;
+  }
+}
+
 .title {
   text-align: center;
 }
