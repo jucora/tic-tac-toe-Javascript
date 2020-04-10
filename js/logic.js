@@ -1,28 +1,7 @@
 //MODULE
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
-  const level2 = [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ];
-
-  return { cells, level2 };
+  return { cells };
 })();
 
 //FACTORY FUNCTIONS
@@ -41,53 +20,31 @@ const player1 = player("Julian", character[0]);
 const player2 = player("Ana", character[1]);
 const board = gameBoard;
 let currentPlayer = player1;
-let level = 1;
+
 let row = null;
 let winner = false;
+let game = false;
 let info = document.querySelector("#info");
 
 //FUNCTIONS
-function printBoard(board) {
-  console.log(board);
-  document.querySelector(".container").innerHTML = "";
-  info.textContent = `${currentPlayer.name} is playing!`;
-  for (let i = 0; i < level; i++) {
-    container = document.createElement("div");
-    container.setAttribute("class", "board-container");
-
-    for (let i = 0; i < board.length; i++) {
-      let cell = document.createElement("div");
-      cell.classList.add("col-4", "cell");
-      cell.setAttribute("onmousedown", "whoopie.play()");
-      container.appendChild(cell);
-    }
-    document.querySelector(".container").appendChild(container);
-  }
-}
 
 function start() {
-  if (level === 1) {
-    document.querySelector("body").classList.add("level1");
-    printBoard(board.cells);
-  } else if (level === 2) {
-    document.querySelector("body").classList.remove("level1");
-    document.querySelector("body").classList.add("level2");
-    document.querySelector(".board-container").classList.add("half");
-    printBoard(board.level2);
+  game = true;
+  document.querySelector("body").classList.add("level1");
+  info.textContent = `${currentPlayer.name} is playing!`;
+  row = document.createElement("div");
+  row.classList.add("row");
+  for (let i = 0; i < board.cells.length; i++) {
+    let cell = document.createElement("div");
+    cell.classList.add("col-4", "cell");
+    cell.setAttribute("onmousedown", "whoopie.play()");
+    row.appendChild(cell);
   }
-}
-
-function checkLevel() {
-  if (level === 1) {
-    level += 1;
-    start();
-  }
+  document.querySelector(".container").appendChild(row);
 }
 
 function checkWinner(currentPlayer, index) {
   let opt = board.cells;
-
-  console.log(currentPlayer);
   let symbol = currentPlayer.character;
   if (
     (opt[0] === opt[1] && opt[1] === opt[2] && opt[0] === symbol) ||
@@ -101,7 +58,7 @@ function checkWinner(currentPlayer, index) {
   ) {
     info.textContent = `${currentPlayer.name} is the winner`;
     winner = true;
-    checkLevel();
+    game = false;
   }
 }
 
@@ -110,7 +67,7 @@ document.addEventListener("DOMContentLoaded", start());
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
   cell.addEventListener("click", function () {
-    if (cell.textContent === "") {
+    if (cell.textContent === "" && game) {
       board.cells[index] = currentPlayer.character;
       if (currentPlayer === player1) {
         cell.textContent = currentPlayer.character;
@@ -118,7 +75,7 @@ document.querySelectorAll(".cell").forEach(function (cell, index) {
         currentPlayer = player2;
       } else {
         cell.textContent = currentPlayer.character;
-        checkWinner(currentPlayer, index);
+        checkWinner(currentPlayer);
         currentPlayer = player1;
       }
     }

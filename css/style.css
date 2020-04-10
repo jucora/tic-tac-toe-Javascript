@@ -9,36 +9,18 @@ body {
   width: 100%;
   height: 100%;
   background-color: #000;
-  background-image: url("../images/level1.jpg"); /*, url(star1.png), url(star2.png);*/
-  background-size: cover;
-  background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
-  background-repeat: repeat-x; /*, repeat-x, repeat-x;*/
-  animation: animate-background linear 10s infinite;
+  background-image: url("../images/level1.jpg");
+  background-size: contain;
+  background-position: 0px 0px;
+  background-repeat: repeat-x;
+  animation: animate-background linear 5s infinite;
 }
 @keyframes animate-background {
   from {
     background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
   }
   to {
-    background-position: -200% 0px, -1000px 0px, -500px 0px;
-  }
-}
-.level2 {
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  background-image: url("../images/level2.jpg"); /*, url(star1.png), url(star2.png);*/
-  background-size: cover;
-  background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
-  background-repeat: repeat-x; /*, repeat-x, repeat-x;*/
-  animation: animate-background linear 10s infinite;
-}
-@keyframes animate-background {
-  from {
-    background-position: 0px 0px; /*, 0px 0px, 0px 0px;*/
-  }
-  to {
-    background-position: -200% 0px, -1000px 0px, -500px 0px;
+    background-position: -200% 0px;
   }
 }
 
@@ -54,13 +36,8 @@ body {
   height: 150px;
 }
 .container {
-  padding: 50px;
-}
-.half {
-  width: 50%;
-}
-.board-container {
-  width: 100%;
+  padding: 30px;
+  width: 50% !important;
 }
 .row {
   display: flex;
@@ -75,11 +52,26 @@ body {
   border: 3px solid gray;
   display: flex;
   font-size: 100px;
-  height: 100px;
+  height: 215px;
   justify-content: center;
-  float: left;
 }
 .cell:hover {
   background-color: cyan;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 1024px) {
+  .cell {
+    height: 200px;
+  }
+  .level1 {
+    background-size: cover;
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .container {
+    margin: 25px;
+    padding: 25px;
+  }
 }
