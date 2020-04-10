@@ -29,9 +29,14 @@ var getUser = new getUserInfo();
 
 //FUNCTIONS
 
+function getInput(name) {
+  player1.name = name;
+  console.log(player1.name);
+}
+
 function getUserInfo() {
   start();
-  this.render = function (dialog) {
+  this.render = function (dialog, func) {
     var winW = window.innerWidth;
     var winH = window.innerHeight;
     var dialogoverlay = document.getElementById("dialogoverlay");
@@ -44,10 +49,14 @@ function getUserInfo() {
     document.getElementById("dialogboxhead").innerHTML =
       "Welcome to the Tic Tac Toe Game!";
     document.getElementById("dialogboxbody").innerHTML = dialog;
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><input id="prompt_value1">';
     document.getElementById("dialogboxfoot").innerHTML =
-      '<button onclick="getUser.ok()" onmousedown = "hereWeGo.play()" onmouseup = "monkey.play()">OK</button>';
+      "<button onclick=\"getUser.ok('" + func + "')\">OK</button>";
   };
-  this.ok = function () {
+  this.ok = function (func) {
+    var prompt_value1 = document.getElementById("prompt_value1").value;
+    window[func](prompt_value1);
     document.getElementById("dialogbox").style.display = "none";
     document.getElementById("dialogoverlay").style.display = "none";
   };
@@ -93,7 +102,7 @@ function checkWinner(currentPlayer, index) {
 //EVENT LISTENERS
 document.addEventListener(
   "DOMContentLoaded",
-  getUser.render("Please provide the next info")
+  getUser.render("Please provide the next info", "getInput")
 );
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
