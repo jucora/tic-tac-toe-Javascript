@@ -1,8 +1,10 @@
+//MODULE
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
 })();
 
+//FACTORY FUNCTIONS
 const player = (name, character) => {
   return { name, character };
 };
@@ -11,8 +13,8 @@ const control = () => {
   [];
 };
 
-//FUNCTIONS
-//
+//VARIABLES
+
 const character = ["😁", "😎", "💩", "😝"];
 const player1 = player("Julian", character[0]);
 const player2 = player("Ana", character[1]);
@@ -20,9 +22,11 @@ const board = gameBoard;
 let currentPlayer = player1;
 let cell = null;
 let row = null;
-let winner = null;
+let winner = false;
 let info = document.querySelector("#info");
 let game = false;
+
+//FUNCTIONS
 
 function start() {
   game = true;
@@ -30,14 +34,10 @@ function start() {
   row = document.querySelector(".row");
   for (const cell of board.cells) {
     let squareFront = document.createElement("div");
-    squareFront.classList.add("front");
-    let squareBack = document.createElement("div");
-    squareBack.classList.add("back");
-    squareBack.setAttribute("id", "back");
+
     squareFront.classList.add("col-4", "cell");
     squareFront.setAttribute("onmousedown", "whoopie.play()");
     row.appendChild(squareFront);
-    row.appendChild(squareBack);
   }
 }
 
@@ -57,18 +57,13 @@ function checkWinner(currentPlayer, index) {
     (opt[2] === opt[4] && opt[4] === opt[6] && opt[2] === symbol)
   ) {
     info.textContent = `${currentPlayer.name} is the winner`;
+
+    winner = true;
     game = false;
-  } else if (currentPlayer === player1) {
-    currentPlayer = player2;
-  } else {
-    currentPlayer = player1;
-  }
-  {
-    info.textContent = `${currentPlayer.name} is Playing!`;
   }
 }
 
-//EVENT LISTENER
+//EVENT LISTENERS
 document.addEventListener("DOMContentLoaded", start());
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
@@ -84,6 +79,9 @@ document.querySelectorAll(".cell").forEach(function (cell, index) {
         checkWinner(currentPlayer, index);
         currentPlayer = player1;
       }
+    }
+    if (!winner) {
+      info.textContent = `${currentPlayer.name} is Playing!`;
     }
   });
 });
