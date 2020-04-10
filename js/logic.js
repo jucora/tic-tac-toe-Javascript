@@ -25,8 +25,21 @@ let row = null;
 let winner = false;
 let game = false;
 let info = document.querySelector("#info");
+var getUser = new getUserInfo();
 
 //FUNCTIONS
+
+function getUserInfo() {
+  start();
+  this.render = function () {
+    var winW = window.innerWidth;
+    var winH = window.innerHeight;
+    var dialogoverlay = document.getElementById("dialogoverlay");
+    var dialogbox = document.getElementById("dialogbox");
+    dialogoverlay.style.display = "block";
+    dialogoverlay.style.height = winH + "px";
+  };
+}
 
 function start() {
   game = true;
@@ -63,7 +76,10 @@ function checkWinner(currentPlayer, index) {
 }
 
 //EVENT LISTENERS
-document.addEventListener("DOMContentLoaded", start());
+document.addEventListener(
+  "DOMContentLoaded",
+  getUser.render("Welcome to Tic tac toe")
+);
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
   cell.addEventListener("click", function () {
