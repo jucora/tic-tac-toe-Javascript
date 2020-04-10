@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
     <title>Tic tac toe game</title>
+    <script>
+      var whoopie = new Audio();
+      whoopie.src = "sound/whoopie.mp3";
+    </script>
   </head>
   <body>
+    <h1 class="title">Tic Tac Toe Game</h1>
+
     <div class="container">
+      <div class="info-container">
+        <div id="info"></div>
+      </div>
+
       <div class="row"></div>
     </div>
+    <audio src="sound/monkey.mp3" id="background-music" preload="auto"></audio>
     <script src="js/logic.js"></script>
     <link rel="stylesheet" href="css/bootstrap.css" />
   </body>

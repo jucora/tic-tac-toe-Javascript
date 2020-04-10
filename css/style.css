@@ -5,9 +5,26 @@
 body {
   font-family: sans-serif;
 }
+.title {
+  text-align: center;
+}
+.info-container {
+  display: flex;
+  justify-content: center;
+}
+#info {
+  font-size: 30px;
+  height: 150px;
+}
+.container {
+  padding: 50px;
+}
 .row {
   display: flex;
   justify-content: center;
+  -webkit-box-shadow: 17px 14px 20px 8px rgba(0, 0, 0, 0.94);
+  -moz-box-shadow: 17px 14px 20px 8px rgba(0, 0, 0, 0.94);
+  box-shadow: 17px 14px 20px 8px rgba(0, 0, 0, 0.94);
 }
 .cell {
   align-items: center;
@@ -17,9 +34,30 @@ body {
   font-size: 100px;
   height: 300px;
   justify-content: center;
-  width: 500px;
 }
 .cell:hover {
   background-color: cyan;
   cursor: pointer;
+}
+.front {
+  position: absolute;
+  transform: perspective(600px) rotateY(0deg);
+  background: #fc0;
+  border-radius: 7px;
+  backface-visibility: hidden;
+  transition: transform 0.5s linear 0s;
+}
+.back {
+  position: absolute;
+  transform: perspective(600px) rotateY(180deg);
+  background: #80bfff;
+  border-radius: 7px;
+  backface-visibility: hidden;
+  transition: transform 0.5s linear 0s;
+}
+.front-animate {
+  transform: perspective(600px) rotateY(-180deg);
+}
+.back-animate {
+  transform: perspective(600px) rotateY(0deg);
 }
