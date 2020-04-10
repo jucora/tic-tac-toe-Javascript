@@ -48,9 +48,18 @@ function getUserInfo() {
     dialogbox.style.display = "block";
     document.getElementById("dialogboxhead").innerHTML =
       "Welcome to the Tic Tac Toe Game!";
-    document.getElementById("dialogboxbody").innerHTML = dialog;
+    document.getElementById("dialogboxbody").innerHTML =
+      "<h2>" + dialog + "</h2>";
     document.getElementById("dialogboxbody").innerHTML +=
       '<br><input id="prompt_value1">';
+    document.getElementById("dialogboxbody").innerHTML +=
+      "<br><h2>Please select your character</h2><h2>" +
+      character[0] +
+      character[1] +
+      character[2] +
+      character[3] +
+      "</h2>" +
+      '<input id="prompt_value1">';
     document.getElementById("dialogboxfoot").innerHTML =
       "<button onclick=\"getUser.ok('" + func + "')\">OK</button>";
   };
@@ -102,7 +111,7 @@ function checkWinner(currentPlayer, index) {
 //EVENT LISTENERS
 document.addEventListener(
   "DOMContentLoaded",
-  getUser.render("Please provide the next info", "getInput")
+  getUser.render("Your name", "getInput")
 );
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
