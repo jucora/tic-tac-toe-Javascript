@@ -45,7 +45,7 @@ function getUserInfo() {
       "Welcome to the Tic Tac Toe Game!";
     document.getElementById("dialogboxbody").innerHTML = dialog;
     document.getElementById("dialogboxfoot").innerHTML =
-      '<button onclick="getUser.ok()" onmousedown = "hereWeGo.play()">OK</button>';
+      '<button onclick="getUser.ok()" onmousedown = "hereWeGo.play()" onmouseup = "monkey.play()">OK</button>';
   };
   this.ok = function () {
     document.getElementById("dialogbox").style.display = "none";
@@ -84,6 +84,9 @@ function checkWinner(currentPlayer, index) {
     info.textContent = `${currentPlayer.name} is the winner`;
     winner = true;
     game = false;
+    setTimeout(() => {
+      wow.play();
+    }, 500);
   }
 }
 
