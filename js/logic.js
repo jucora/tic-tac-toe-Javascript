@@ -1,7 +1,28 @@
 //MODULE
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
-  return { cells };
+  const level2 = [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
+
+  return { cells, level2 };
 })();
 
 //FACTORY FUNCTIONS
@@ -20,24 +41,46 @@ const player1 = player("Julian", character[0]);
 const player2 = player("Ana", character[1]);
 const board = gameBoard;
 let currentPlayer = player1;
-let cell = null;
+let level = 1;
 let row = null;
 let winner = false;
 let info = document.querySelector("#info");
-let game = false;
 
 //FUNCTIONS
+function printBoard(board) {
+  console.log(board);
+  document.querySelector(".container").innerHTML = "";
+  info.textContent = `${currentPlayer.name} is playing!`;
+  for (let i = 0; i < level; i++) {
+    container = document.createElement("div");
+    container.setAttribute("class", "board-container");
+
+    for (let i = 0; i < board.length; i++) {
+      let cell = document.createElement("div");
+      cell.classList.add("col-4", "cell");
+      cell.setAttribute("onmousedown", "whoopie.play()");
+      container.appendChild(cell);
+    }
+    document.querySelector(".container").appendChild(container);
+  }
+}
 
 function start() {
-  game = true;
-  info.textContent = `${currentPlayer.name} is playing!`;
-  row = document.querySelector(".row");
-  for (const cell of board.cells) {
-    let squareFront = document.createElement("div");
+  if (level === 1) {
+    document.querySelector("body").classList.add("level1");
+    printBoard(board.cells);
+  } else if (level === 2) {
+    document.querySelector("body").classList.remove("level1");
+    document.querySelector("body").classList.add("level2");
+    document.querySelector(".board-container").classList.add("half");
+    printBoard(board.level2);
+  }
+}
 
-    squareFront.classList.add("col-4", "cell");
-    squareFront.setAttribute("onmousedown", "whoopie.play()");
-    row.appendChild(squareFront);
+function checkLevel() {
+  if (level === 1) {
+    level += 1;
+    start();
   }
 }
 
@@ -57,9 +100,8 @@ function checkWinner(currentPlayer, index) {
     (opt[2] === opt[4] && opt[4] === opt[6] && opt[2] === symbol)
   ) {
     info.textContent = `${currentPlayer.name} is the winner`;
-
     winner = true;
-    game = false;
+    checkLevel();
   }
 }
 
@@ -68,7 +110,7 @@ document.addEventListener("DOMContentLoaded", start());
 
 document.querySelectorAll(".cell").forEach(function (cell, index) {
   cell.addEventListener("click", function () {
-    if (cell.textContent === "" && game) {
+    if (cell.textContent === "") {
       board.cells[index] = currentPlayer.character;
       if (currentPlayer === player1) {
         cell.textContent = currentPlayer.character;
