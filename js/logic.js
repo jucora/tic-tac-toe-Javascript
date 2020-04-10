@@ -16,10 +16,10 @@ const control = () => {
 //VARIABLES
 
 const character = ["😁", "😎", "💩", "😝"];
-const player1 = player("Julian", character[0]);
-const player2 = player("Ana", character[1]);
+let player1 = "";
+let player2 = player("julian", character[0]);
 const board = gameBoard;
-let currentPlayer = player1;
+let currentPlayer = "";
 
 let row = null;
 let winner = false;
@@ -29,9 +29,26 @@ var getUser = new getUserInfo();
 
 //FUNCTIONS
 
-function getInput(name) {
-  player1.name = name;
-  console.log(player1.name);
+function getInput(name, index) {
+  if (name === "") {
+    document.getElementById("nameInputTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("prompt_value1").style.background = "#F78070";
+  } else if (index < 1 || index > 4 || index === "") {
+    document.getElementById("selectCharacterTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("prompt_value2").style.background = "#F78070";
+  } else {
+    player1 = player(name, character[index - 1]);
+    document.getElementById("dialogbox").style.display = "none";
+    document.getElementById("dialogoverlay").style.display = "none";
+    hereWeGo.play();
+    setTimeout(() => {
+      monkey.play();
+    }, 1000);
+    currentPlayer = player1;
+    //return currentPlayer;
+  }
 }
 
 function getUserInfo() {
@@ -49,29 +66,35 @@ function getUserInfo() {
     document.getElementById("dialogboxhead").innerHTML =
       "Welcome to the Tic Tac Toe Game!";
     document.getElementById("dialogboxbody").innerHTML =
-      "<h2>" + dialog + "</h2>";
+      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
     document.getElementById("dialogboxbody").innerHTML +=
-      '<br><input id="prompt_value1">';
+      '<br><input id="prompt_value1" class = "form-control">';
     document.getElementById("dialogboxbody").innerHTML +=
-      "<br><h2>Please select your character</h2><h2>" +
+      "<br><h2 id='selectCharacterTitle'>Please select your character</h2><h2>" +
+      " 1)" +
       character[0] +
+      " 2)" +
       character[1] +
+      " 3)" +
       character[2] +
+      " 4)" +
       character[3] +
       "</h2>" +
-      '<input id="prompt_value1">';
+      "<input id='prompt_value2'class = 'form-control'>";
     document.getElementById("dialogboxfoot").innerHTML =
-      "<button onclick=\"getUser.ok('" + func + "')\">OK</button>";
+      "<button class = 'btn btn-primary form-control' onclick=\"getUser.ok('" +
+      func +
+      "')\">OK";
   };
   this.ok = function (func) {
     var prompt_value1 = document.getElementById("prompt_value1").value;
-    window[func](prompt_value1);
-    document.getElementById("dialogbox").style.display = "none";
-    document.getElementById("dialogoverlay").style.display = "none";
+    var prompt_value2 = document.getElementById("prompt_value2").value;
+    window[func](prompt_value1, prompt_value2);
   };
 }
 
 function start() {
+  console.log(player1.character);
   game = true;
   document.querySelector("body").classList.add("level1");
   info.textContent = `${currentPlayer.name} is playing!`;
@@ -86,7 +109,7 @@ function start() {
   document.querySelector(".container").appendChild(row);
 }
 
-function checkWinner(currentPlayer, index) {
+function checkWinner(currentPlayer) {
   let opt = board.cells;
   let symbol = currentPlayer.character;
   if (
@@ -99,12 +122,15 @@ function checkWinner(currentPlayer, index) {
     (opt[0] === opt[4] && opt[4] === opt[8] && opt[0] === symbol) ||
     (opt[2] === opt[4] && opt[4] === opt[6] && opt[2] === symbol)
   ) {
-    info.textContent = `${currentPlayer.name} is the winner`;
-    winner = true;
-    game = false;
-    setTimeout(() => {
-      wow.play();
-    }, 500);
+    if (symbol != "") {
+      info.textContent = `${currentPlayer.name} is the winner`;
+      winner = true;
+      game = false;
+      setTimeout(() => {
+        wow.play();
+      }, 500);
+      console.log(board.cells);
+    }
   }
 }
 
