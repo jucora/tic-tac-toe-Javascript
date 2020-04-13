@@ -45,6 +45,10 @@ body {
   text-align: right;
 }
 
+hr {
+  background-color: white;
+}
+
 /*dialog end*/
 
 .level1 {

@@ -38,7 +38,6 @@ function initialBox() {
 }
 
 function gameMode() {
-  start();
   this.render = (dialog) => {
     initialBox();
     document.getElementById("dialogboxbody").innerHTML =
@@ -47,10 +46,17 @@ function gameMode() {
       '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button>';
     document.getElementById("dialogboxbody").innerHTML +=
       '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+
+    document.querySelector("#mode1").addEventListener("click", function () {
+      singleUserInfo.render("Your name", "checkInputSinglePlayer");
+    });
+    document.querySelector("#mode2").addEventListener("click", function () {
+      doubleUsersInfo.render("Player ", "checkInputTwoPlayers");
+    });
   };
 }
 
-function checkInput(name, index) {
+function checkInputSinglePlayer(name, index) {
   if (name === "") {
     document.getElementById("nameInputTitle").textContent =
       "Name can't be empty!";
@@ -68,6 +74,44 @@ function checkInput(name, index) {
       monkey.play();
     }, 1000);
     currentPlayer = player1;
+    if (document.querySelector(".row")) {
+      document.querySelector(".row").innerHTML = "";
+      board.cells = ["", "", "", "", "", "", "", "", ""];
+    }
+    start();
+  }
+}
+
+function checkInputTwoPlayers(name1, character1, name2, character2) {
+  if (name1 === "" || name2 === "") {
+    if (name1 === "") {
+      document.querySelector(".namePlayerOneTitle").textContent =
+        "Name can't be empty!";
+      document.querySelector("#playerOneName").style.background = "#F78070";
+    } else if (name2 === "") {
+      document.querySelector(".namePlayerTwoTitle").textContent =
+        "Name can't be empty!";
+      document.querySelector("#playerTwoName").style.background = "#F78070";
+    }
+  } else if (character1 < 1 || character1 > 4 || character1 === "") {
+    document.getElementById("characterPlayerOneTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerOne").style.background = "#F78070";
+  } else if (character2 < 1 || character2 > 4 || character2 === "") {
+    document.getElementById("characterPlayerTwoTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerTwo").style.background = "#F78070";
+  } else {
+    player1 = player(name1, character[character1 - 1]);
+    player2 = player(name2, character[character2 - 1]);
+    document.getElementById("dialogbox").style.display = "none";
+    document.getElementById("dialogoverlay").style.display = "none";
+    hereWeGo.play();
+    setTimeout(() => {
+      monkey.play();
+    }, 1000);
+    currentPlayer = player1;
+    start();
   }
 }
 
@@ -85,6 +129,27 @@ const start = () => {
     row.appendChild(cell);
   }
   document.querySelector(".container").appendChild(row);
+
+  document.querySelectorAll(".cell").forEach((cell, index) => {
+    cell.addEventListener("click", function () {
+      console.log("current user is ", currentPlayer);
+      if (cell.textContent === "" && game) {
+        board.cells[index] = currentPlayer.character;
+        if (currentPlayer === player1) {
+          cell.textContent = currentPlayer.character;
+          checkWinner(currentPlayer);
+          currentPlayer = player2;
+        } else {
+          cell.textContent = currentPlayer.character;
+          checkWinner(currentPlayer);
+          currentPlayer = player1;
+        }
+      }
+      if (!winner) {
+        info.textContent = `${currentPlayer.name} is Playing!`;
+      }
+    });
+  });
 };
 
 function getSingleUserInfo() {
@@ -119,8 +184,73 @@ function getSingleUserInfo() {
   };
 }
 
+function getDoubleUsersInfo() {
+  this.render = (dialog, func) => {
+    initialBox();
+    document.getElementById("dialogboxbody").innerHTML =
+      "<h2 class='namePlayerOneTitle'>" + dialog + "1 name </h2>";
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><input id="playerOneName" class = "form-control">';
+    document.getElementById("dialogboxbody").innerHTML +=
+      "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>" +
+      " 1)" +
+      character[0] +
+      " 2)" +
+      character[1] +
+      " 3)" +
+      character[2] +
+      " 4)" +
+      character[3] +
+      "</h2>" +
+      "<input id='characterPlayerOne'class = 'form-control'>";
+
+    document.getElementById("dialogboxbody").innerHTML +=
+      "<h2 class='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><input id="playerTwoName" class = "form-control">';
+    document.getElementById("dialogboxbody").innerHTML +=
+      "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>" +
+      " 1)" +
+      character[0] +
+      " 2)" +
+      character[1] +
+      " 3)" +
+      character[2] +
+      " 4)" +
+      character[3] +
+      "</h2>" +
+      "<input id='characterPlayerTwo'class = 'form-control'>";
+
+    document.getElementById("dialogboxfoot").innerHTML =
+      "<button class = 'btn btn-primary form-control' onclick=\"doubleUsersInfo.ok('" +
+      func +
+      "')\">OK";
+  };
+  this.ok = (func) => {
+    var playerOneName = document.getElementById("playerOneName").value;
+    var playerOneCharacter = document.getElementById("characterPlayerOne")
+      .value;
+    var playerTwoName = document.getElementById("playerTwoName").value;
+    var playerTwoCharacter = document.getElementById("characterPlayerTwo")
+      .value;
+    if (playerOneName === playerTwoName) {
+      alert("Player's names should be different!");
+    } else if (playerOneCharacter === playerTwoCharacter) {
+      alert("Players can't have the same character");
+    } else {
+      window[func](
+        playerOneName,
+        playerOneCharacter,
+        playerTwoName,
+        playerTwoCharacter
+      );
+    }
+  };
+}
+
 const gameType = new gameMode();
 const singleUserInfo = new getSingleUserInfo();
+const doubleUsersInfo = new getDoubleUsersInfo();
 
 const checkWinner = (currentPlayer) => {
   let opt = board.cells;
@@ -154,33 +284,6 @@ document.addEventListener(
   gameType.render("Please select the game mode")
 );
 
-document.querySelector("#mode1").addEventListener("click", function () {
-  singleUserInfo.render("Your name", "checkInput");
-});
-document.querySelector("#mode2").addEventListener("click", function () {});
-
-document.querySelectorAll(".cell").forEach((cell, index) => {
-  cell.addEventListener("click", function () {
-    if (cell.textContent === "" && game) {
-      board.cells[index] = currentPlayer.character;
-      if (currentPlayer === player1) {
-        cell.textContent = currentPlayer.character;
-        checkWinner(currentPlayer);
-        currentPlayer = player2;
-      } else {
-        cell.textContent = currentPlayer.character;
-        checkWinner(currentPlayer);
-        currentPlayer = player1;
-      }
-    }
-    if (!winner) {
-      info.textContent = `${currentPlayer.name} is Playing!`;
-    }
-  });
-});
-
 document.querySelector(".restart").addEventListener("click", function () {
-  document.querySelector(".row").innerHTML = "";
-  board.cells = ["", "", "", "", "", "", "", "", ""];
-  //SOLUCIONAR
+  gameType.render("");
 });
