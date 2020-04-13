@@ -88,19 +88,8 @@ const start = () => {
 };
 
 function getSingleUserInfo() {
-  start();
   this.render = (dialog, func) => {
-    var winW = window.innerWidth;
-    var winH = window.innerHeight;
-    var dialogoverlay = document.getElementById("dialogoverlay");
-    var dialogbox = document.getElementById("dialogbox");
-    dialogoverlay.style.display = "block";
-    dialogoverlay.style.height = winH + "px";
-    dialogbox.style.left = winW / 2 - 550 * 0.5 + "px";
-    dialogbox.style.top = "100px";
-    dialogbox.style.display = "block";
-    document.getElementById("dialogboxhead").innerHTML =
-      "Welcome to the Tic Tac Toe Game!";
+    initialBox();
     document.getElementById("dialogboxbody").innerHTML =
       "<h2 id='nameInputTitle'>" + dialog + "</h2>";
     document.getElementById("dialogboxbody").innerHTML +=
@@ -117,12 +106,13 @@ function getSingleUserInfo() {
       character[3] +
       "</h2>" +
       "<input id='prompt_value2'class = 'form-control'>";
+
     document.getElementById("dialogboxfoot").innerHTML =
-      "<button class = 'btn btn-primary form-control' onclick=\"getUser.ok('" +
+      "<button class = 'btn btn-primary form-control' onclick=\"singleUserInfo.ok('" +
       func +
       "')\">OK";
   };
-  this.ok = function (func) {
+  this.ok = (func) => {
     var prompt_value1 = document.getElementById("prompt_value1").value;
     var prompt_value2 = document.getElementById("prompt_value2").value;
     window[func](prompt_value1, prompt_value2);
@@ -130,6 +120,7 @@ function getSingleUserInfo() {
 }
 
 const gameType = new gameMode();
+const singleUserInfo = new getSingleUserInfo();
 
 const checkWinner = (currentPlayer) => {
   let opt = board.cells;
@@ -160,13 +151,12 @@ const checkWinner = (currentPlayer) => {
 
 document.addEventListener(
   "DOMContentLoaded",
-  //getUser.render("Your name", "checkInput")
   gameType.render("Please select the game mode")
 );
 
-document
-  .getElementById("#mode1")
-  .addEventListener("click", getSingleUserInfo());
+document.querySelector("#mode1").addEventListener("click", function () {
+  singleUserInfo.render("Your name", "checkInput");
+});
 document.querySelector("#mode2").addEventListener("click", function () {});
 
 document.querySelectorAll(".cell").forEach((cell, index) => {
