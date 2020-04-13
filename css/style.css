@@ -69,6 +69,10 @@ body {
 .title {
   text-align: center;
 }
+.container {
+  padding: 30px;
+  width: 50% !important;
+}
 .info-container {
   display: flex;
   justify-content: center;
@@ -77,10 +81,17 @@ body {
   font-size: 30px;
   height: 150px;
 }
-.container {
-  padding: 30px;
-  width: 50% !important;
+
+.restart {
+  background-color: olive;
+  color: #fff;
+  padding: 15px;
+  width: 150px;
 }
+.restart:hover {
+  cursor: pointer;
+}
+
 .row {
   display: flex;
   justify-content: center;

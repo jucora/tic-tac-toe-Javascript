@@ -1,10 +1,8 @@
-//MODULE
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
 })();
 
-//FACTORY FUNCTIONS
 const player = (name, character) => {
   return { name, character };
 };
@@ -12,8 +10,6 @@ const player = (name, character) => {
 const control = () => {
   [];
 };
-
-//VARIABLES
 
 const character = ["😁", "😎", "💩", "😝"];
 let player1 = "";
@@ -25,11 +21,9 @@ let row = null;
 let winner = false;
 let game = false;
 let info = document.querySelector("#info");
-var getUser = new getUserInfo();
+let restart = document.querySelector(".restart");
 
-//FUNCTIONS
-
-function getInput(name, index) {
+function checkInput(name, index) {
   if (name === "") {
     document.getElementById("nameInputTitle").textContent =
       "Name can't be empty!";
@@ -47,13 +41,48 @@ function getInput(name, index) {
       monkey.play();
     }, 1000);
     currentPlayer = player1;
-    //return currentPlayer;
   }
 }
 
+const start = () => {
+  game = true;
+  document.querySelector("body").classList.add("level1");
+  info.textContent = `${currentPlayer.name} is playing!`;
+  restart.textContent = "Restart Game";
+  row = document.createElement("div");
+  row.classList.add("row");
+  for (let i = 0; i < board.cells.length; i++) {
+    let cell = document.createElement("div");
+    cell.classList.add("col-4", "cell");
+    cell.setAttribute("onmousedown", "whoopie.play()");
+    row.appendChild(cell);
+  }
+  document.querySelector(".container").appendChild(row);
+
+  document.querySelectorAll(".cell").forEach((cell, index) => {
+    cell.addEventListener("click", function () {
+      if (cell.textContent === "" && game) {
+        board.cells[index] = currentPlayer.character;
+        if (currentPlayer === player1) {
+          cell.textContent = currentPlayer.character;
+          checkWinner(currentPlayer);
+          currentPlayer = player2;
+        } else {
+          cell.textContent = currentPlayer.character;
+          checkWinner(currentPlayer);
+          currentPlayer = player1;
+        }
+      }
+      if (!winner) {
+        info.textContent = `${currentPlayer.name} is Playing!`;
+      }
+    });
+  });
+};
+
 function getUserInfo() {
   start();
-  this.render = function (dialog, func) {
+  this.render = (dialog, func) => {
     var winW = window.innerWidth;
     var winH = window.innerHeight;
     var dialogoverlay = document.getElementById("dialogoverlay");
@@ -93,23 +122,9 @@ function getUserInfo() {
   };
 }
 
-function start() {
-  console.log(player1.character);
-  game = true;
-  document.querySelector("body").classList.add("level1");
-  info.textContent = `${currentPlayer.name} is playing!`;
-  row = document.createElement("div");
-  row.classList.add("row");
-  for (let i = 0; i < board.cells.length; i++) {
-    let cell = document.createElement("div");
-    cell.classList.add("col-4", "cell");
-    cell.setAttribute("onmousedown", "whoopie.play()");
-    row.appendChild(cell);
-  }
-  document.querySelector(".container").appendChild(row);
-}
+const getUser = new getUserInfo();
 
-function checkWinner(currentPlayer) {
+const checkWinner = (currentPlayer) => {
   let opt = board.cells;
   let symbol = currentPlayer.character;
   if (
@@ -132,30 +147,15 @@ function checkWinner(currentPlayer) {
       console.log(board.cells);
     }
   }
-}
+};
 
-//EVENT LISTENERS
 document.addEventListener(
   "DOMContentLoaded",
-  getUser.render("Your name", "getInput")
+  getUser.render("Your name", "checkInput")
 );
 
-document.querySelectorAll(".cell").forEach(function (cell, index) {
-  cell.addEventListener("click", function () {
-    if (cell.textContent === "" && game) {
-      board.cells[index] = currentPlayer.character;
-      if (currentPlayer === player1) {
-        cell.textContent = currentPlayer.character;
-        checkWinner(currentPlayer);
-        currentPlayer = player2;
-      } else {
-        cell.textContent = currentPlayer.character;
-        checkWinner(currentPlayer);
-        currentPlayer = player1;
-      }
-    }
-    if (!winner) {
-      info.textContent = `${currentPlayer.name} is Playing!`;
-    }
-  });
+document.querySelector(".restart").addEventListener("click", function () {
+  document.querySelector(".row").innerHTML = "";
+  board.cells = ["", "", "", "", "", "", "", "", ""];
+  //SOLUCIONAR
 });
