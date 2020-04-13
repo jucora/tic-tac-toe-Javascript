@@ -23,6 +23,33 @@ let game = false;
 let info = document.querySelector("#info");
 let restart = document.querySelector(".restart");
 
+function initialBox() {
+  var winW = window.innerWidth;
+  var winH = window.innerHeight;
+  var dialogoverlay = document.getElementById("dialogoverlay");
+  var dialogbox = document.getElementById("dialogbox");
+  dialogoverlay.style.display = "block";
+  dialogoverlay.style.height = winH + "px";
+  dialogbox.style.left = winW / 2 - 550 * 0.5 + "px";
+  dialogbox.style.top = "100px";
+  dialogbox.style.display = "block";
+  document.getElementById("dialogboxhead").innerHTML =
+    "Welcome to the Tic Tac Toe Game!";
+}
+
+function gameMode() {
+  start();
+  this.render = (dialog) => {
+    initialBox();
+    document.getElementById("dialogboxbody").innerHTML =
+      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button>';
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+  };
+}
+
 function checkInput(name, index) {
   if (name === "") {
     document.getElementById("nameInputTitle").textContent =
@@ -58,29 +85,9 @@ const start = () => {
     row.appendChild(cell);
   }
   document.querySelector(".container").appendChild(row);
-
-  document.querySelectorAll(".cell").forEach((cell, index) => {
-    cell.addEventListener("click", function () {
-      if (cell.textContent === "" && game) {
-        board.cells[index] = currentPlayer.character;
-        if (currentPlayer === player1) {
-          cell.textContent = currentPlayer.character;
-          checkWinner(currentPlayer);
-          currentPlayer = player2;
-        } else {
-          cell.textContent = currentPlayer.character;
-          checkWinner(currentPlayer);
-          currentPlayer = player1;
-        }
-      }
-      if (!winner) {
-        info.textContent = `${currentPlayer.name} is Playing!`;
-      }
-    });
-  });
 };
 
-function getUserInfo() {
+function getSingleUserInfo() {
   start();
   this.render = (dialog, func) => {
     var winW = window.innerWidth;
@@ -122,7 +129,7 @@ function getUserInfo() {
   };
 }
 
-const getUser = new getUserInfo();
+const gameType = new gameMode();
 
 const checkWinner = (currentPlayer) => {
   let opt = board.cells;
@@ -149,10 +156,38 @@ const checkWinner = (currentPlayer) => {
   }
 };
 
+//listeners
+
 document.addEventListener(
   "DOMContentLoaded",
-  getUser.render("Your name", "checkInput")
+  //getUser.render("Your name", "checkInput")
+  gameType.render("Please select the game mode")
 );
+
+document
+  .getElementById("#mode1")
+  .addEventListener("click", getSingleUserInfo());
+document.querySelector("#mode2").addEventListener("click", function () {});
+
+document.querySelectorAll(".cell").forEach((cell, index) => {
+  cell.addEventListener("click", function () {
+    if (cell.textContent === "" && game) {
+      board.cells[index] = currentPlayer.character;
+      if (currentPlayer === player1) {
+        cell.textContent = currentPlayer.character;
+        checkWinner(currentPlayer);
+        currentPlayer = player2;
+      } else {
+        cell.textContent = currentPlayer.character;
+        checkWinner(currentPlayer);
+        currentPlayer = player1;
+      }
+    }
+    if (!winner) {
+      info.textContent = `${currentPlayer.name} is Playing!`;
+    }
+  });
+});
 
 document.querySelector(".restart").addEventListener("click", function () {
   document.querySelector(".row").innerHTML = "";
