@@ -13,7 +13,7 @@ const control = () => {
 
 const character = ["😁", "😎", "💩", "😝"];
 let player1 = "";
-let player2 = player("julian", character[0]);
+let player2 = "";
 const board = gameBoard;
 let currentPlayer = "";
 
@@ -56,6 +56,13 @@ function gameMode() {
   };
 }
 
+function restartGame() {
+  if (document.querySelector(".cells")) {
+    document.querySelector(".cells").remove();
+    board.cells = ["", "", "", "", "", "", "", "", ""];
+  }
+}
+
 function checkInputSinglePlayer(name, index) {
   if (name === "") {
     document.getElementById("nameInputTitle").textContent =
@@ -67,6 +74,7 @@ function checkInputSinglePlayer(name, index) {
     document.getElementById("prompt_value2").style.background = "#F78070";
   } else {
     player1 = player(name, character[index - 1]);
+    player2 = player("Computer", "😈");
     document.getElementById("dialogbox").style.display = "none";
     document.getElementById("dialogoverlay").style.display = "none";
     hereWeGo.play();
@@ -74,10 +82,7 @@ function checkInputSinglePlayer(name, index) {
       monkey.play();
     }, 1000);
     currentPlayer = player1;
-    if (document.querySelector(".row")) {
-      document.querySelector(".row").innerHTML = "";
-      board.cells = ["", "", "", "", "", "", "", "", ""];
-    }
+    restartGame();
     start();
   }
 }
@@ -111,6 +116,7 @@ function checkInputTwoPlayers(name1, character1, name2, character2) {
       monkey.play();
     }, 1000);
     currentPlayer = player1;
+    restartGame();
     start();
   }
 }
@@ -121,7 +127,7 @@ const start = () => {
   info.textContent = `${currentPlayer.name} is playing!`;
   restart.textContent = "Restart Game";
   row = document.createElement("div");
-  row.classList.add("row");
+  row.classList.add("row", "cells");
   for (let i = 0; i < board.cells.length; i++) {
     let cell = document.createElement("div");
     cell.classList.add("col-4", "cell");
@@ -233,9 +239,12 @@ function getDoubleUsersInfo() {
     var playerTwoName = document.getElementById("playerTwoName").value;
     var playerTwoCharacter = document.getElementById("characterPlayerTwo")
       .value;
-    if (playerOneName === playerTwoName) {
+    if (playerOneName === playerTwoName && playerOneName != "") {
       alert("Player's names should be different!");
-    } else if (playerOneCharacter === playerTwoCharacter) {
+    } else if (
+      playerOneCharacter === playerTwoCharacter &&
+      playerOneCharacter != ""
+    ) {
       alert("Players can't have the same character");
     } else {
       window[func](
