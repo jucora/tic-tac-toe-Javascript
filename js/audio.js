@@ -5,5 +5,5 @@ hereWeGo.src = "sound/here_we_go.mp3";
 var monkey = new Audio();
 monkey.src = "sound/monkey.mp3";
 monkey.loop = true;
-var wow = new Audio();
-wow.src = "sound/wow.mp3";
+var laugh = new Audio();
+laugh.src = "sound/laugh.mp3";

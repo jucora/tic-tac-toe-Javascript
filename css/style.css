@@ -79,11 +79,11 @@ hr {
 }
 .info-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
 }
 #info {
   font-size: 30px;
-  height: 150px;
 }
 
 .restart {

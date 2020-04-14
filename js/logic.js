@@ -121,6 +121,16 @@ function checkInputTwoPlayers(name1, character1, name2, character2) {
   }
 }
 
+function isTie() {
+  if (getEmptySpaces().length === 0) {
+    info.textContent = "TIE: No winners this time!";
+    return true;
+  } else {
+    info.textContent = `${currentPlayer.name} is Playing!`;
+    return false;
+  }
+}
+
 const start = () => {
   game = true;
   document.querySelector("body").classList.add("level1");
@@ -138,7 +148,6 @@ const start = () => {
 
   document.querySelectorAll(".cell").forEach((cell, index) => {
     cell.addEventListener("click", function () {
-      console.log("current user is ", currentPlayer);
       if (cell.textContent === "" && game) {
         board.cells[index] = currentPlayer.character;
         if (currentPlayer === player1) {
@@ -152,7 +161,7 @@ const start = () => {
         }
       }
       if (!winner) {
-        info.textContent = `${currentPlayer.name} is Playing!`;
+        isTie();
       }
     });
   });
@@ -257,32 +266,95 @@ function getDoubleUsersInfo() {
   };
 }
 
+function getEmptySpaces() {
+  let empty = [];
+  for (let i = 0; i < board.cells.length; i++) {
+    if (!board.cells[i]) {
+      empty.push(i);
+    }
+  }
+  return empty;
+}
+
 const gameType = new gameMode();
 const singleUserInfo = new getSingleUserInfo();
 const doubleUsersInfo = new getDoubleUsersInfo();
 
+function setWinner(cell1, cell2, cell3) {
+  let cells = document.querySelector(".cells");
+
+  info.textContent = `${currentPlayer.name} is the winner`;
+  winner = true;
+  game = false;
+  setTimeout(() => {
+    laugh.play();
+  }, 500);
+  cells.children[cell1].style.background = "green";
+  cells.children[cell2].style.background = "green";
+  cells.children[cell3].style.background = "green";
+  return true;
+}
+
 const checkWinner = (currentPlayer) => {
   let opt = board.cells;
   let symbol = currentPlayer.character;
+
   if (
-    (opt[0] === opt[1] && opt[1] === opt[2] && opt[0] === symbol) ||
-    (opt[3] === opt[4] && opt[4] === opt[5] && opt[3] === symbol) ||
-    (opt[6] === opt[7] && opt[7] === opt[8] && opt[6] === symbol) ||
-    (opt[0] === opt[3] && opt[3] === opt[6] && opt[0] === symbol) ||
-    (opt[1] === opt[4] && opt[4] === opt[7] && opt[1] === symbol) ||
-    (opt[2] === opt[5] && opt[5] === opt[8] && opt[2] === symbol) ||
-    (opt[0] === opt[4] && opt[4] === opt[8] && opt[0] === symbol) ||
-    (opt[2] === opt[4] && opt[4] === opt[6] && opt[2] === symbol)
+    opt[0] === opt[1] &&
+    opt[1] === opt[2] &&
+    opt[2] === symbol &&
+    symbol != ""
   ) {
-    if (symbol != "") {
-      info.textContent = `${currentPlayer.name} is the winner`;
-      winner = true;
-      game = false;
-      setTimeout(() => {
-        wow.play();
-      }, 500);
-      console.log(board.cells);
-    }
+    setWinner(0, 1, 2);
+  } else if (
+    opt[3] === opt[4] &&
+    opt[4] === opt[5] &&
+    opt[3] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(3, 4, 5);
+  } else if (
+    opt[6] === opt[7] &&
+    opt[7] === opt[8] &&
+    opt[6] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(6, 7, 8);
+  } else if (
+    opt[0] === opt[3] &&
+    opt[3] === opt[6] &&
+    opt[0] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(0, 3, 6);
+  } else if (
+    opt[1] === opt[4] &&
+    opt[4] === opt[7] &&
+    opt[1] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(1, 4, 7);
+  } else if (
+    opt[2] === opt[5] &&
+    opt[5] === opt[8] &&
+    opt[2] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(2, 5, 8);
+  } else if (
+    opt[0] === opt[4] &&
+    opt[4] === opt[8] &&
+    opt[0] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(0, 4, 8);
+  } else if (
+    opt[2] === opt[4] &&
+    opt[4] === opt[6] &&
+    opt[2] === symbol &&
+    symbol != ""
+  ) {
+    setWinner(2, 4, 6);
   }
 };
 
