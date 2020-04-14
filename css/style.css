@@ -89,6 +89,7 @@ hr {
 .restart {
   background-color: olive;
   color: #fff;
+  text-align: center;
   padding: 15px;
   width: 150px;
 }

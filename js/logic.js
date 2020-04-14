@@ -124,6 +124,9 @@ function checkInputTwoPlayers(name1, character1, name2, character2) {
 function isTie() {
   if (getEmptySpaces().length === 0) {
     info.textContent = "TIE: No winners this time!";
+    document.querySelectorAll(".cell").forEach(function (cell) {
+      cell.style.background = "green";
+    });
     return true;
   } else {
     info.textContent = `${currentPlayer.name} is Playing!`;
