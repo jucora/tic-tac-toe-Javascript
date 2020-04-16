@@ -7,10 +7,6 @@ const player = (name, character, rol = "human") => {
   return { name, character, rol };
 };
 
-const control = () => {
-  [];
-};
-
 const character = ["😁", "😎", "💩", "😝"];
 let player1 = "";
 let player2 = "";
@@ -18,7 +14,6 @@ const board = gameBoard;
 let currentPlayer = "";
 
 let row = null;
-let winner = false;
 let game = false;
 let info = document.querySelector("#info");
 let restart = document.querySelector(".restart");
@@ -46,12 +41,14 @@ function gameMode() {
       '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button>';
     document.getElementById("dialogboxbody").innerHTML +=
       '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
-
+    let mode = null;
     document.querySelector("#mode1").addEventListener("click", function () {
-      singleUserInfo.render("Your name", "checkInputSinglePlayer");
+      mode = 1;
+      userInfo.render("Player", "checkInput", mode);
     });
     document.querySelector("#mode2").addEventListener("click", function () {
-      doubleUsersInfo.render("Player ", "checkInputTwoPlayers");
+      mode = 2;
+      userInfo.render("Player ", "checkInput", mode);
     });
   };
 }
@@ -63,19 +60,35 @@ function restartGame() {
   }
 }
 
-function checkInputSinglePlayer(name, index) {
-  if (name === "") {
-    document.getElementById("nameInputTitle").textContent =
+function checkInput(name1, index1, name2, index2, mode) {
+  if (name1 === "") {
+    document.getElementById("namePlayerOneTitle").textContent =
       "Name can't be empty!";
-    document.getElementById("prompt_value1").style.background = "#F78070";
-  } else if (index < 1 || index > 4 || index === "") {
-    document.getElementById("selectCharacterTitle").textContent =
+    document.getElementById("playerOneName").style.background = "#F78070";
+  } else if (name2 === "") {
+    document.getElementById("namePlayerTwoTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("playerTwoName").style.background = "#F78070";
+  }
+
+  if (index1 < 1 || index1 > 4 || index1 === "") {
+    document.getElementById("characterPlayerOneTitle").textContent =
       "Please select a valid character between 1 to 4";
-    document.getElementById("prompt_value2").style.background = "#F78070";
-  } else {
-    player1 = player(name, character[index - 1]);
-    player2 = player("Computer", "😈");
-    player2.rol = "computer";
+    document.getElementById("characterPlayerOne").style.background = "#F78070";
+  } else if (index2 < 1 || index2 > 4 || index2 === "") {
+    document.getElementById("characterPlayerTwoTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerTwo").style.background = "#F78070";
+  }
+
+  if (name1 && index1 && name2 && index2) {
+    player1 = player(name, character[index1 - 1]);
+    if (mode === 2) {
+      player2 = player(name2, character[index2 - 1]);
+    } else {
+      player2 = player(name2, index2);
+      player2.rol = "computer";
+    }
     document.getElementById("dialogbox").style.display = "none";
     document.getElementById("dialogoverlay").style.display = "none";
     hereWeGo.play();
@@ -88,38 +101,11 @@ function checkInputSinglePlayer(name, index) {
   }
 }
 
-function checkInputTwoPlayers(name1, character1, name2, character2) {
-  if (name1 === "" || name2 === "") {
-    if (name1 === "") {
-      document.querySelector(".namePlayerOneTitle").textContent =
-        "Name can't be empty!";
-      document.querySelector("#playerOneName").style.background = "#F78070";
-    } else if (name2 === "") {
-      document.querySelector(".namePlayerTwoTitle").textContent =
-        "Name can't be empty!";
-      document.querySelector("#playerTwoName").style.background = "#F78070";
-    }
-  } else if (character1 < 1 || character1 > 4 || character1 === "") {
-    document.getElementById("characterPlayerOneTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerOne").style.background = "#F78070";
-  } else if (character2 < 1 || character2 > 4 || character2 === "") {
-    document.getElementById("characterPlayerTwoTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerTwo").style.background = "#F78070";
-  } else {
-    player1 = player(name1, character[character1 - 1]);
-    player2 = player(name2, character[character2 - 1]);
-    document.getElementById("dialogbox").style.display = "none";
-    document.getElementById("dialogoverlay").style.display = "none";
-    hereWeGo.play();
-    setTimeout(() => {
-      monkey.play();
-    }, 1000);
-    currentPlayer = player1;
-    restartGame();
-    start();
-  }
+function deleteKeySound() {
+  currentPlayer = null;
+  document.querySelectorAll(".cell").forEach(function (c) {
+    c.removeAttribute("onmousedown");
+  });
 }
 
 function isTie() {
@@ -128,6 +114,7 @@ function isTie() {
     document.querySelectorAll(".cell").forEach(function (cell) {
       cell.style.background = "green";
     });
+    deleteKeySound();
     return true;
   } else {
     info.textContent = `${currentPlayer.name} is Playing!`;
@@ -139,11 +126,12 @@ function setWinner(cell1, cell2, cell3) {
   let cells = document.querySelector(".cells");
 
   info.textContent = `${currentPlayer.name} is the winner`;
-  winner = true;
+
   game = false;
   setTimeout(() => {
     laugh.play();
   }, 500);
+  deleteKeySound();
   cells.children[cell1].style.background = "green";
   cells.children[cell2].style.background = "green";
   cells.children[cell3].style.background = "green";
@@ -270,43 +258,18 @@ const start = () => {
   });
 };
 
-function getSingleUserInfo() {
-  this.render = (dialog, func) => {
+function getUserInfo() {
+  this.render = (dialog, func, mode) => {
     initialBox();
+    let dialogDetail;
+    if (mode === 1) {
+      dialogDetail = " name";
+    } else {
+      dialogDetail = " 1 name";
+    }
     document.getElementById("dialogboxbody").innerHTML =
-      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><input id="prompt_value1" class = "form-control">';
-    document.getElementById("dialogboxbody").innerHTML +=
-      "<br><h2 id='selectCharacterTitle'>Please select your character</h2><h2>" +
-      " 1)" +
-      character[0] +
-      " 2)" +
-      character[1] +
-      " 3)" +
-      character[2] +
-      " 4)" +
-      character[3] +
-      "</h2>" +
-      "<input id='prompt_value2'class = 'form-control'>";
+      "<h2 id='namePlayerOneTitle'>" + dialog + dialogDetail + "</h2>";
 
-    document.getElementById("dialogboxfoot").innerHTML =
-      "<button class = 'btn btn-primary form-control' onclick=\"singleUserInfo.ok('" +
-      func +
-      "')\">OK";
-  };
-  this.ok = (func) => {
-    var prompt_value1 = document.getElementById("prompt_value1").value;
-    var prompt_value2 = document.getElementById("prompt_value2").value;
-    window[func](prompt_value1, prompt_value2);
-  };
-}
-
-function getDoubleUsersInfo() {
-  this.render = (dialog, func) => {
-    initialBox();
-    document.getElementById("dialogboxbody").innerHTML =
-      "<h2 class='namePlayerOneTitle'>" + dialog + "1 name </h2>";
     document.getElementById("dialogboxbody").innerHTML +=
       '<br><input id="playerOneName" class = "form-control">';
     document.getElementById("dialogboxbody").innerHTML +=
@@ -322,49 +285,58 @@ function getDoubleUsersInfo() {
       "</h2>" +
       "<input id='characterPlayerOne'class = 'form-control'>";
 
-    document.getElementById("dialogboxbody").innerHTML +=
-      "<h2 class='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><input id="playerTwoName" class = "form-control">';
-    document.getElementById("dialogboxbody").innerHTML +=
-      "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>" +
-      " 1)" +
-      character[0] +
-      " 2)" +
-      character[1] +
-      " 3)" +
-      character[2] +
-      " 4)" +
-      character[3] +
-      "</h2>" +
-      "<input id='characterPlayerTwo'class = 'form-control'>";
-
+    if (mode === 2) {
+      document.getElementById("dialogboxbody").innerHTML +=
+        "<h2 id='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
+      document.getElementById("dialogboxbody").innerHTML +=
+        '<br><input id="playerTwoName" class = "form-control">';
+      document.getElementById("dialogboxbody").innerHTML +=
+        "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>" +
+        " 1)" +
+        character[0] +
+        " 2)" +
+        character[1] +
+        " 3)" +
+        character[2] +
+        " 4)" +
+        character[3] +
+        "</h2>" +
+        "<input id='characterPlayerTwo'class = 'form-control'>";
+    }
     document.getElementById("dialogboxfoot").innerHTML =
-      "<button class = 'btn btn-primary form-control' onclick=\"doubleUsersInfo.ok('" +
+      "<button class = 'btn btn-primary form-control' onclick=\"userInfo.ok('" +
       func +
       "')\">OK";
   };
   this.ok = (func) => {
-    var playerOneName = document.getElementById("playerOneName").value;
-    var playerOneCharacter = document.getElementById("characterPlayerOne")
-      .value;
-    var playerTwoName = document.getElementById("playerTwoName").value;
-    var playerTwoCharacter = document.getElementById("characterPlayerTwo")
-      .value;
-    if (playerOneName === playerTwoName && playerOneName != "") {
-      alert("Player's names should be different!");
-    } else if (
-      playerOneCharacter === playerTwoCharacter &&
-      playerOneCharacter != ""
-    ) {
-      alert("Players can't have the same character");
+    if (document.getElementById("playerTwoName")) {
+      var playerOneName = document.getElementById("playerOneName").value;
+      var playerOneCharacter = document.getElementById("characterPlayerOne")
+        .value;
+      var playerTwoName = document.getElementById("playerTwoName").value;
+      var playerTwoCharacter = document.getElementById("characterPlayerTwo")
+        .value;
+      if (playerOneName === playerTwoName && playerOneName != "") {
+        alert("Player's names should be different!");
+      } else if (
+        playerOneCharacter === playerTwoCharacter &&
+        playerOneCharacter != ""
+      ) {
+        alert("Players can't have the same character");
+      } else {
+        window[func](
+          playerOneName,
+          playerOneCharacter,
+          playerTwoName,
+          playerTwoCharacter,
+          2
+        );
+      }
     } else {
-      window[func](
-        playerOneName,
-        playerOneCharacter,
-        playerTwoName,
-        playerTwoCharacter
-      );
+      var playerOneName = document.getElementById("playerOneName").value;
+      var playerOneCharacter = document.getElementById("characterPlayerOne")
+        .value;
+      window[func](playerOneName, playerOneCharacter, "computer", "😈");
     }
   };
 }
@@ -392,45 +364,34 @@ function minimax(gameData, PLAYER) {
   if (checkWinner(gameData, player1.character)) return { evaluation: -10 };
   if (checkTie(gameData)) return { evaluation: 0 };
 
-  // LOOK FOR EMTY SPACES
   let EMPTY_SPACES = getEmptySpaces(gameData);
 
-  // SAVE ALL MOVES AND THEIR EVALUATIONS
   let moves = [];
 
-  // LOOP OVER THE EMPTY SPACES TO EVALUATE THEM
   for (let i = 0; i < EMPTY_SPACES.length; i++) {
-    // GET THE ID OF THE EMPTY SPACE
     let id = EMPTY_SPACES[i];
 
-    // BACK UP THE SPACE
     let backup = gameData[id];
 
-    // MAKE THE MOVE FOR THE PLAYER
     gameData[id] = PLAYER;
 
-    // SAVE THE MOVE'S ID AND EVALUATION
     let move = {};
     move.id = id;
-    // THE MOVE EVALUATION
+
     if (PLAYER == player2.character) {
       move.evaluation = minimax(gameData, player1.character).evaluation;
     } else {
       move.evaluation = minimax(gameData, player2.character).evaluation;
     }
 
-    // RESTORE SPACE
     gameData[id] = backup;
 
-    // SAVE MOVE TO MOVES ARRAY
     moves.push(move);
   }
 
-  // MINIMAX ALGORITHM
   let bestMove;
 
   if (PLAYER == player2.character) {
-    // MAXIMIZER
     let bestEvaluation = -Infinity;
     for (let i = 0; i < moves.length; i++) {
       if (moves[i].evaluation > bestEvaluation) {
@@ -439,7 +400,6 @@ function minimax(gameData, PLAYER) {
       }
     }
   } else {
-    // MINIMIZER
     let bestEvaluation = +Infinity;
     for (let i = 0; i < moves.length; i++) {
       if (moves[i].evaluation < bestEvaluation) {
@@ -453,8 +413,7 @@ function minimax(gameData, PLAYER) {
 }
 
 const gameType = new gameMode();
-const singleUserInfo = new getSingleUserInfo();
-const doubleUsersInfo = new getDoubleUsersInfo();
+const userInfo = new getUserInfo();
 
 //listeners
 
