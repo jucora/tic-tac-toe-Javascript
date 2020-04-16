@@ -232,29 +232,38 @@ const start = () => {
         board.cells[index] = currentPlayer.character;
         if (currentPlayer === player1) {
           cell.textContent = currentPlayer.character;
-          if (checkWinner(board.cells, currentPlayer)) {
-            setWinner(winnerCells);
-          } else {
-            isTie();
-          }
-          currentPlayer = player2;
-        }
-        if (currentPlayer === player2 && currentPlayer.rol === "computer") {
-          let id = minimax(board.cells, player2.character).id;
-          board.cells[id] = currentPlayer.character;
-          document.querySelector(".cells").children[id].textContent =
-            currentPlayer.character;
           if (checkWinner(board.cells, currentPlayer.character)) {
             winnerCells = checkWinner(board.cells, currentPlayer.character);
 
             setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
           } else {
+            currentPlayer = player2;
             isTie();
           }
-          currentPlayer = player1;
+          if (currentPlayer === player2 && currentPlayer.rol === "computer") {
+            let id = minimax(board.cells, player2.character).id;
+            board.cells[id] = currentPlayer.character;
+            document.querySelector(".cells").children[id].textContent =
+              currentPlayer.character;
+            if (checkWinner(board.cells, currentPlayer.character)) {
+              winnerCells = checkWinner(board.cells, currentPlayer.character);
+
+              setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+            } else {
+              currentPlayer = player1;
+              isTie();
+            }
+          }
         } else if (currentPlayer === player2 && currentPlayer.rol === "human") {
           cell.textContent = currentPlayer.character;
-          checkWinner(board.cells, currentPlayer.character);
+          if (checkWinner(board.cells, currentPlayer.character)) {
+            winnerCells = checkWinner(board.cells, currentPlayer.character);
+
+            setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+          } else {
+            currentPlayer = player1;
+            isTie();
+          }
         }
       }
     });
