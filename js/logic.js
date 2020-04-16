@@ -3,8 +3,8 @@ const gameBoard = (() => {
   return { cells };
 })();
 
-const player = (name, character) => {
-  return { name, character };
+const player = (name, character, rol = "human") => {
+  return { name, character, rol };
 };
 
 const control = () => {
@@ -75,6 +75,7 @@ function checkInputSinglePlayer(name, index) {
   } else {
     player1 = player(name, character[index - 1]);
     player2 = player("Computer", "😈");
+    player2.rol = "computer";
     document.getElementById("dialogbox").style.display = "none";
     document.getElementById("dialogoverlay").style.display = "none";
     hereWeGo.play();
@@ -122,7 +123,7 @@ function checkInputTwoPlayers(name1, character1, name2, character2) {
 }
 
 function isTie() {
-  if (getEmptySpaces().length === 0) {
+  if (getEmptySpaces(board.cells).length === 0) {
     info.textContent = "TIE: No winners this time!";
     document.querySelectorAll(".cell").forEach(function (cell) {
       cell.style.background = "green";
@@ -133,6 +134,82 @@ function isTie() {
     return false;
   }
 }
+
+function setWinner(cell1, cell2, cell3) {
+  let cells = document.querySelector(".cells");
+
+  info.textContent = `${currentPlayer.name} is the winner`;
+  winner = true;
+  game = false;
+  setTimeout(() => {
+    laugh.play();
+  }, 500);
+  cells.children[cell1].style.background = "green";
+  cells.children[cell2].style.background = "green";
+  cells.children[cell3].style.background = "green";
+}
+
+const checkWinner = (board, currentPlayer) => {
+  if (
+    board[0] === board[1] &&
+    board[1] === board[2] &&
+    board[2] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 0, 1, 2];
+  } else if (
+    board[3] === board[4] &&
+    board[4] === board[5] &&
+    board[3] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 3, 4, 5];
+  } else if (
+    board[6] === board[7] &&
+    board[7] === board[8] &&
+    board[6] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 6, 7, 8];
+  } else if (
+    board[0] === board[3] &&
+    board[3] === board[6] &&
+    board[0] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 0, 3, 6];
+  } else if (
+    board[1] === board[4] &&
+    board[4] === board[7] &&
+    board[1] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 1, 4, 7];
+  } else if (
+    board[2] === board[5] &&
+    board[5] === board[8] &&
+    board[2] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 2, 5, 8];
+  } else if (
+    board[0] === board[4] &&
+    board[4] === board[8] &&
+    board[0] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 0, 4, 8];
+  } else if (
+    board[2] === board[4] &&
+    board[4] === board[6] &&
+    board[2] === currentPlayer &&
+    currentPlayer != ""
+  ) {
+    return [true, 2, 4, 6];
+  } else {
+    return false;
+  }
+};
 
 const start = () => {
   game = true;
@@ -155,16 +232,30 @@ const start = () => {
         board.cells[index] = currentPlayer.character;
         if (currentPlayer === player1) {
           cell.textContent = currentPlayer.character;
-          checkWinner(currentPlayer);
+          if (checkWinner(board.cells, currentPlayer)) {
+            setWinner(winnerCells);
+          } else {
+            isTie();
+          }
           currentPlayer = player2;
-        } else {
-          cell.textContent = currentPlayer.character;
-          checkWinner(currentPlayer);
-          currentPlayer = player1;
         }
-      }
-      if (!winner) {
-        isTie();
+        if (currentPlayer === player2 && currentPlayer.rol === "computer") {
+          let id = minimax(board.cells, player2.character).id;
+          board.cells[id] = currentPlayer.character;
+          document.querySelector(".cells").children[id].textContent =
+            currentPlayer.character;
+          if (checkWinner(board.cells, currentPlayer.character)) {
+            winnerCells = checkWinner(board.cells, currentPlayer.character);
+
+            setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+          } else {
+            isTie();
+          }
+          currentPlayer = player1;
+        } else if (currentPlayer === player2 && currentPlayer.rol === "human") {
+          cell.textContent = currentPlayer.character;
+          checkWinner(board.cells, currentPlayer.character);
+        }
       }
     });
   });
@@ -269,97 +360,92 @@ function getDoubleUsersInfo() {
   };
 }
 
-function getEmptySpaces() {
-  let empty = [];
-  for (let i = 0; i < board.cells.length; i++) {
-    if (!board.cells[i]) {
-      empty.push(i);
+function getEmptySpaces(gameData) {
+  let EMPTY = [];
+
+  for (let id = 0; id < gameData.length; id++) {
+    if (!gameData[id]) EMPTY.push(id);
+  }
+
+  return EMPTY;
+}
+
+function checkTie() {
+  if (getEmptySpaces(board.cells).length === 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function minimax(gameData, PLAYER) {
+  if (checkWinner(gameData, player2.character)) return { evaluation: +10 };
+  if (checkWinner(gameData, player1.character)) return { evaluation: -10 };
+  if (checkTie(gameData)) return { evaluation: 0 };
+
+  // LOOK FOR EMTY SPACES
+  let EMPTY_SPACES = getEmptySpaces(gameData);
+
+  // SAVE ALL MOVES AND THEIR EVALUATIONS
+  let moves = [];
+
+  // LOOP OVER THE EMPTY SPACES TO EVALUATE THEM
+  for (let i = 0; i < EMPTY_SPACES.length; i++) {
+    // GET THE ID OF THE EMPTY SPACE
+    let id = EMPTY_SPACES[i];
+
+    // BACK UP THE SPACE
+    let backup = gameData[id];
+
+    // MAKE THE MOVE FOR THE PLAYER
+    gameData[id] = PLAYER;
+
+    // SAVE THE MOVE'S ID AND EVALUATION
+    let move = {};
+    move.id = id;
+    // THE MOVE EVALUATION
+    if (PLAYER == player2.character) {
+      move.evaluation = minimax(gameData, player1.character).evaluation;
+    } else {
+      move.evaluation = minimax(gameData, player2.character).evaluation;
+    }
+
+    // RESTORE SPACE
+    gameData[id] = backup;
+
+    // SAVE MOVE TO MOVES ARRAY
+    moves.push(move);
+  }
+
+  // MINIMAX ALGORITHM
+  let bestMove;
+
+  if (PLAYER == player2.character) {
+    // MAXIMIZER
+    let bestEvaluation = -Infinity;
+    for (let i = 0; i < moves.length; i++) {
+      if (moves[i].evaluation > bestEvaluation) {
+        bestEvaluation = moves[i].evaluation;
+        bestMove = moves[i];
+      }
+    }
+  } else {
+    // MINIMIZER
+    let bestEvaluation = +Infinity;
+    for (let i = 0; i < moves.length; i++) {
+      if (moves[i].evaluation < bestEvaluation) {
+        bestEvaluation = moves[i].evaluation;
+        bestMove = moves[i];
+      }
     }
   }
-  return empty;
+
+  return bestMove;
 }
 
 const gameType = new gameMode();
 const singleUserInfo = new getSingleUserInfo();
 const doubleUsersInfo = new getDoubleUsersInfo();
-
-function setWinner(cell1, cell2, cell3) {
-  let cells = document.querySelector(".cells");
-
-  info.textContent = `${currentPlayer.name} is the winner`;
-  winner = true;
-  game = false;
-  setTimeout(() => {
-    laugh.play();
-  }, 500);
-  cells.children[cell1].style.background = "green";
-  cells.children[cell2].style.background = "green";
-  cells.children[cell3].style.background = "green";
-  return true;
-}
-
-const checkWinner = (currentPlayer) => {
-  let opt = board.cells;
-  let symbol = currentPlayer.character;
-
-  if (
-    opt[0] === opt[1] &&
-    opt[1] === opt[2] &&
-    opt[2] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(0, 1, 2);
-  } else if (
-    opt[3] === opt[4] &&
-    opt[4] === opt[5] &&
-    opt[3] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(3, 4, 5);
-  } else if (
-    opt[6] === opt[7] &&
-    opt[7] === opt[8] &&
-    opt[6] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(6, 7, 8);
-  } else if (
-    opt[0] === opt[3] &&
-    opt[3] === opt[6] &&
-    opt[0] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(0, 3, 6);
-  } else if (
-    opt[1] === opt[4] &&
-    opt[4] === opt[7] &&
-    opt[1] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(1, 4, 7);
-  } else if (
-    opt[2] === opt[5] &&
-    opt[5] === opt[8] &&
-    opt[2] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(2, 5, 8);
-  } else if (
-    opt[0] === opt[4] &&
-    opt[4] === opt[8] &&
-    opt[0] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(0, 4, 8);
-  } else if (
-    opt[2] === opt[4] &&
-    opt[4] === opt[6] &&
-    opt[2] === symbol &&
-    symbol != ""
-  ) {
-    setWinner(2, 4, 6);
-  }
-};
 
 //listeners
 
