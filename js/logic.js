@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
@@ -132,6 +134,91 @@ function setWinner(cell1, cell2, cell3) {
   cells.children[cell1].style.background = "green";
   cells.children[cell2].style.background = "green";
   cells.children[cell3].style.background = "green";
+}
+
+function getEmptySpaces(gameData) {
+  let EMPTY = [];
+
+  for (let id = 0; id < gameData.length; id += 1) {
+    if (!gameData[id]) EMPTY.push(id);
+  }
+
+  return EMPTY;
+}
+
+function isTie() {
+  if (getEmptySpaces(board.cells).length === 0) {
+    info.textContent = "TIE: No winners this time!";
+    document.querySelectorAll(".cell").forEach(function (cell) {
+      cell.style.background = "green";
+    });
+    deleteKeySound();
+    return true;
+  } else {
+    info.textContent = `${currentPlayer.name} is Playing!`;
+    return false;
+  }
+}
+
+function checkTie() {
+  if (getEmptySpaces(board.cells).length === 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function minimax(gameData, PLAYER) {
+  if (checkWinner(gameData, player2.character)) return { evaluation: +10 };
+  if (checkWinner(gameData, player1.character)) return { evaluation: -10 };
+  if (checkTie(gameData)) return { evaluation: 0 };
+
+  let EMPTY_SPACES = getEmptySpaces(gameData);
+
+  let moves = [];
+
+  for (let i = 0; i < EMPTY_SPACES.length; i += 1) {
+    let id = EMPTY_SPACES[i];
+
+    let backup = gameData[id];
+
+    gameData[id] = PLAYER;
+
+    let move = {};
+    move.id = id;
+
+    if (PLAYER === player2.character) {
+      move.evaluation = minimax(gameData, player1.character).evaluation;
+    } else {
+      move.evaluation = minimax(gameData, player2.character).evaluation;
+    }
+
+    gameData[id] = backup;
+
+    moves.push(move);
+  }
+
+  let bestMove;
+
+  if (PLAYER === player2.character) {
+    let bestEvaluation = -Infinity;
+    for (let i = 0; i < moves.length; i += 1) {
+      if (moves[i].evaluation > bestEvaluation) {
+        bestEvaluation = moves[i].evaluation;
+        bestMove = moves[i];
+      }
+    }
+  } else {
+    let bestEvaluation = +Infinity;
+    for (let i = 0; i < moves.length; i += 1) {
+      if (moves[i].evaluation < bestEvaluation) {
+        bestEvaluation = moves[i].evaluation;
+        bestMove = moves[i];
+      }
+    }
+  }
+
+  return bestMove;
 }
 
 const start = () => {
@@ -344,91 +431,6 @@ function GameMode() {
 }
 
 const gameType = new GameMode();
-
-function getEmptySpaces(gameData) {
-  let EMPTY = [];
-
-  for (let id = 0; id < gameData.length; id += 1) {
-    if (!gameData[id]) EMPTY.push(id);
-  }
-
-  return EMPTY;
-}
-
-function isTie() {
-  if (getEmptySpaces(board.cells).length === 0) {
-    info.textContent = "TIE: No winners this time!";
-    document.querySelectorAll(".cell").forEach(function (cell) {
-      cell.style.background = "green";
-    });
-    deleteKeySound();
-    return true;
-  } else {
-    info.textContent = `${currentPlayer.name} is Playing!`;
-    return false;
-  }
-}
-
-function checkTie() {
-  if (getEmptySpaces(board.cells).length === 0) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function minimax(gameData, PLAYER) {
-  if (checkWinner(gameData, player2.character)) return { evaluation: +10 };
-  if (checkWinner(gameData, player1.character)) return { evaluation: -10 };
-  if (checkTie(gameData)) return { evaluation: 0 };
-
-  let EMPTY_SPACES = getEmptySpaces(gameData);
-
-  let moves = [];
-
-  for (let i = 0; i < EMPTY_SPACES.length; i += 1) {
-    let id = EMPTY_SPACES[i];
-
-    let backup = gameData[id];
-
-    gameData[id] = PLAYER;
-
-    let move = {};
-    move.id = id;
-
-    if (PLAYER === player2.character) {
-      move.evaluation = minimax(gameData, player1.character).evaluation;
-    } else {
-      move.evaluation = minimax(gameData, player2.character).evaluation;
-    }
-
-    gameData[id] = backup;
-
-    moves.push(move);
-  }
-
-  let bestMove;
-
-  if (PLAYER === player2.character) {
-    let bestEvaluation = -Infinity;
-    for (let i = 0; i < moves.length; i += 1) {
-      if (moves[i].evaluation > bestEvaluation) {
-        bestEvaluation = moves[i].evaluation;
-        bestMove = moves[i];
-      }
-    }
-  } else {
-    let bestEvaluation = +Infinity;
-    for (let i = 0; i < moves.length; i += 1) {
-      if (moves[i].evaluation < bestEvaluation) {
-        bestEvaluation = moves[i].evaluation;
-        bestMove = moves[i];
-      }
-    }
-  }
-
-  return bestMove;
-}
 
 document.addEventListener(
   "DOMContentLoaded",
