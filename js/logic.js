@@ -31,19 +31,7 @@ let game = false;
 let info = document.querySelector("#info");
 let restart = document.querySelector(".restart");
 
-function initialBox() {
-  var winW = window.innerWidth;
-  var winH = window.innerHeight;
-  var dialogoverlay = document.getElementById("dialogoverlay");
-  var dialogbox = document.getElementById("dialogbox");
-  dialogoverlay.style.display = "block";
-  dialogoverlay.style.height = winH + "px";
-  dialogbox.style.left = winW / 2 - 550 * 0.5 + "px";
-  dialogbox.style.top = "100px";
-  dialogbox.style.display = "block";
-  document.getElementById("dialogboxhead").innerHTML =
-    "Welcome to the Tic Tac Toe Game!";
-}
+initialBox();
 
 function restartGame() {
   if (document.querySelector(".cells")) {
@@ -327,46 +315,7 @@ function GetUserInfo() {
     } else {
       dialogDetail = " 1 name";
     }
-    document.getElementById("dialogboxbody").innerHTML =
-      "<h2 id='namePlayerOneTitle'>" + dialog + dialogDetail + "</h2>";
-
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><input id="playerOneName" class = "form-control">';
-    document.getElementById("dialogboxbody").innerHTML +=
-      "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>" +
-      " 1)" +
-      character[0] +
-      " 2)" +
-      character[1] +
-      " 3)" +
-      character[2] +
-      " 4)" +
-      character[3] +
-      "</h2>" +
-      "<input id='characterPlayerOne'class = 'form-control'>";
-
-    if (mode === 2) {
-      document.getElementById("dialogboxbody").innerHTML +=
-        "<br><hr><br><h2 id='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
-      document.getElementById("dialogboxbody").innerHTML +=
-        '<br><input id="playerTwoName" class = "form-control">';
-      document.getElementById("dialogboxbody").innerHTML +=
-        "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>" +
-        " 1)" +
-        character[0] +
-        " 2)" +
-        character[1] +
-        " 3)" +
-        character[2] +
-        " 4)" +
-        character[3] +
-        "</h2>" +
-        "<input id='characterPlayerTwo'class = 'form-control'>";
-    }
-    document.getElementById("dialogboxfoot").innerHTML =
-      "<button class = 'btn btn-primary form-control' onclick=\"userInfo.ok('" +
-      func +
-      "')\">OK";
+    dialogBoxesPlayers(dialog, func, mode, dialogDetail);
   };
   this.ok = (func) => {
     if (document.getElementById("playerTwoName")) {
@@ -412,12 +361,7 @@ const userInfo = new GetUserInfo();
 function GameMode() {
   this.render = (dialog) => {
     initialBox();
-    document.getElementById("dialogboxbody").innerHTML =
-      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+    selectGameMode(dialog);
     let mode = null;
     document.querySelector("#mode1").addEventListener("click", function () {
       mode = 1;
