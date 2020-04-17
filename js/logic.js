@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/*global initialBox, dialogBoxesPlayers, selectGameMode*/
 
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
