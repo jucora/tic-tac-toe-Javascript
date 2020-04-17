@@ -38,7 +38,7 @@ function gameMode() {
     document.getElementById("dialogboxbody").innerHTML =
       "<h2 id='nameInputTitle'>" + dialog + "</h2>";
     document.getElementById("dialogboxbody").innerHTML +=
-      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button>';
+      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
     document.getElementById("dialogboxbody").innerHTML +=
       '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
     let mode = null;
@@ -82,7 +82,7 @@ function checkInput(name1, index1, name2, index2, mode) {
   }
 
   if (name1 && index1 && name2 && index2) {
-    player1 = player(name, character[index1 - 1]);
+    player1 = player(name1, character[index1 - 1]);
     if (mode === 2) {
       player2 = player(name2, character[index2 - 1]);
     } else {
@@ -200,6 +200,7 @@ const checkWinner = (board, currentPlayer) => {
 };
 
 const start = () => {
+  console.log("current", currentPlayer);
   game = true;
   document.querySelector("body").classList.add("level1");
   info.textContent = `${currentPlayer.name} is playing!`;
@@ -287,7 +288,7 @@ function getUserInfo() {
 
     if (mode === 2) {
       document.getElementById("dialogboxbody").innerHTML +=
-        "<h2 id='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
+        "<br><hr><br><h2 id='namePlayerTwoTitle'>" + dialog + " 2 name</h2>";
       document.getElementById("dialogboxbody").innerHTML +=
         '<br><input id="playerTwoName" class = "form-control">';
       document.getElementById("dialogboxbody").innerHTML +=
