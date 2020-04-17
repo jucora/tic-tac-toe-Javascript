@@ -7,6 +7,16 @@ const player = (name, character, rol = "human") => {
   return { name, character, rol };
 };
 
+let whoopie = new Audio();
+whoopie.src = "sound/whoopie.mp3";
+let hereWeGo = new Audio();
+hereWeGo.src = "sound/here_we_go.mp3";
+let monkey = new Audio();
+monkey.src = "sound/monkey.mp3";
+monkey.loop = true;
+let laugh = new Audio();
+laugh.src = "sound/laugh.mp3";
+
 const character = ["😁", "😎", "💩", "😝"];
 let player1 = "";
 let player2 = "";
@@ -14,6 +24,7 @@ const board = gameBoard;
 let currentPlayer = "";
 
 let row = null;
+let winnerCells = "";
 let game = false;
 let info = document.querySelector("#info");
 let restart = document.querySelector(".restart");
@@ -32,27 +43,6 @@ function initialBox() {
     "Welcome to the Tic Tac Toe Game!";
 }
 
-function gameMode() {
-  this.render = (dialog) => {
-    initialBox();
-    document.getElementById("dialogboxbody").innerHTML =
-      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
-    document.getElementById("dialogboxbody").innerHTML +=
-      '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
-    let mode = null;
-    document.querySelector("#mode1").addEventListener("click", function () {
-      mode = 1;
-      userInfo.render("Player", "checkInput", mode);
-    });
-    document.querySelector("#mode2").addEventListener("click", function () {
-      mode = 2;
-      userInfo.render("Player ", "checkInput", mode);
-    });
-  };
-}
-
 function restartGame() {
   if (document.querySelector(".cells")) {
     document.querySelector(".cells").remove();
@@ -60,66 +50,73 @@ function restartGame() {
   }
 }
 
-function checkInput(name1, index1, name2, index2, mode) {
-  if (name1 === "") {
-    document.getElementById("namePlayerOneTitle").textContent =
-      "Name can't be empty!";
-    document.getElementById("playerOneName").style.background = "#F78070";
-  } else if (name2 === "") {
-    document.getElementById("namePlayerTwoTitle").textContent =
-      "Name can't be empty!";
-    document.getElementById("playerTwoName").style.background = "#F78070";
+const checkWinner = (board, currentPlayer) => {
+  if (
+    board[0] === board[1] &&
+    board[1] === board[2] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 0, 1, 2];
+  } else if (
+    board[3] === board[4] &&
+    board[4] === board[5] &&
+    board[3] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 3, 4, 5];
+  } else if (
+    board[6] === board[7] &&
+    board[7] === board[8] &&
+    board[6] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 6, 7, 8];
+  } else if (
+    board[0] === board[3] &&
+    board[3] === board[6] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 0, 3, 6];
+  } else if (
+    board[1] === board[4] &&
+    board[4] === board[7] &&
+    board[1] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 1, 4, 7];
+  } else if (
+    board[2] === board[5] &&
+    board[5] === board[8] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 2, 5, 8];
+  } else if (
+    board[0] === board[4] &&
+    board[4] === board[8] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 0, 4, 8];
+  } else if (
+    board[2] === board[4] &&
+    board[4] === board[6] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
+  ) {
+    return [true, 2, 4, 6];
+  } else {
+    return false;
   }
-
-  if (index1 < 1 || index1 > 4 || index1 === "") {
-    document.getElementById("characterPlayerOneTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerOne").style.background = "#F78070";
-  } else if (index2 < 1 || index2 > 4 || index2 === "") {
-    document.getElementById("characterPlayerTwoTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerTwo").style.background = "#F78070";
-  }
-
-  if (name1 && index1 && name2 && index2) {
-    player1 = player(name1, character[index1 - 1]);
-    if (mode === 2) {
-      player2 = player(name2, character[index2 - 1]);
-    } else {
-      player2 = player(name2, index2);
-      player2.rol = "computer";
-    }
-    document.getElementById("dialogbox").style.display = "none";
-    document.getElementById("dialogoverlay").style.display = "none";
-    hereWeGo.play();
-    setTimeout(() => {
-      monkey.play();
-    }, 1000);
-    currentPlayer = player1;
-    restartGame();
-    start();
-  }
-}
+};
 
 function deleteKeySound() {
   currentPlayer = null;
   document.querySelectorAll(".cell").forEach(function (c) {
     c.removeAttribute("onmousedown");
   });
-}
-
-function isTie() {
-  if (getEmptySpaces(board.cells).length === 0) {
-    info.textContent = "TIE: No winners this time!";
-    document.querySelectorAll(".cell").forEach(function (cell) {
-      cell.style.background = "green";
-    });
-    deleteKeySound();
-    return true;
-  } else {
-    info.textContent = `${currentPlayer.name} is Playing!`;
-    return false;
-  }
 }
 
 function setWinner(cell1, cell2, cell3) {
@@ -137,77 +134,13 @@ function setWinner(cell1, cell2, cell3) {
   cells.children[cell3].style.background = "green";
 }
 
-const checkWinner = (board, currentPlayer) => {
-  if (
-    board[0] === board[1] &&
-    board[1] === board[2] &&
-    board[2] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 0, 1, 2];
-  } else if (
-    board[3] === board[4] &&
-    board[4] === board[5] &&
-    board[3] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 3, 4, 5];
-  } else if (
-    board[6] === board[7] &&
-    board[7] === board[8] &&
-    board[6] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 6, 7, 8];
-  } else if (
-    board[0] === board[3] &&
-    board[3] === board[6] &&
-    board[0] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 0, 3, 6];
-  } else if (
-    board[1] === board[4] &&
-    board[4] === board[7] &&
-    board[1] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 1, 4, 7];
-  } else if (
-    board[2] === board[5] &&
-    board[5] === board[8] &&
-    board[2] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 2, 5, 8];
-  } else if (
-    board[0] === board[4] &&
-    board[4] === board[8] &&
-    board[0] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 0, 4, 8];
-  } else if (
-    board[2] === board[4] &&
-    board[4] === board[6] &&
-    board[2] === currentPlayer &&
-    currentPlayer != ""
-  ) {
-    return [true, 2, 4, 6];
-  } else {
-    return false;
-  }
-};
-
 const start = () => {
-  console.log("current", currentPlayer);
   game = true;
-  document.querySelector("body").classList.add("level1");
   info.textContent = `${currentPlayer.name} is playing!`;
   restart.textContent = "Restart Game";
   row = document.createElement("div");
   row.classList.add("row", "cells");
-  for (let i = 0; i < board.cells.length; i++) {
+  for (let i = 0; i < board.cells.length; i += 1) {
     let cell = document.createElement("div");
     cell.classList.add("col-4", "cell");
     cell.setAttribute("onmousedown", "whoopie.play()");
@@ -259,7 +192,46 @@ const start = () => {
   });
 };
 
-function getUserInfo() {
+function checkInput(name1, index1, name2, index2, mode) {
+  if (name1 === "") {
+    document.getElementById("namePlayerOneTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("playerOneName").style.background = "#F78070";
+  } else if (name2 === "") {
+    document.getElementById("namePlayerTwoTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("playerTwoName").style.background = "#F78070";
+  }
+
+  if (index1 < 1 || index1 > 4 || index1 === "") {
+    document.getElementById("characterPlayerOneTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerOne").style.background = "#F78070";
+  } else if (index2 < 1 || index2 > 4 || index2 === "") {
+    document.getElementById("characterPlayerTwoTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerTwo").style.background = "#F78070";
+  } else {
+    player1 = player(name1, character[index1 - 1]);
+    if (mode === 2) {
+      player2 = player(name2, character[index2 - 1]);
+    } else {
+      player2 = player(name2, index2);
+      player2.rol = "computer";
+    }
+    document.getElementById("dialogbox").style.display = "none";
+    document.getElementById("dialogoverlay").style.display = "none";
+    hereWeGo.play();
+    setTimeout(() => {
+      monkey.play();
+    }, 1000);
+    currentPlayer = player1;
+    restartGame();
+    start();
+  }
+}
+
+function GetUserInfo() {
   this.render = (dialog, func, mode) => {
     initialBox();
     let dialogDetail;
@@ -317,13 +289,19 @@ function getUserInfo() {
       var playerTwoName = document.getElementById("playerTwoName").value;
       var playerTwoCharacter = document.getElementById("characterPlayerTwo")
         .value;
-      if (playerOneName === playerTwoName && playerOneName != "") {
-        alert("Player's names should be different!");
+      if (playerOneName === playerTwoName && playerOneName !== "") {
+        document.querySelector("#namePlayerTwoTitle").textContent =
+          "Player's names should be different!";
+        document.querySelector("#namePlayerOneTitle").textContent =
+          "Player's names should be different!";
       } else if (
         playerOneCharacter === playerTwoCharacter &&
-        playerOneCharacter != ""
+        playerOneCharacter !== ""
       ) {
-        alert("Players can't have the same character");
+        document.querySelector("#characterPlayerOneTitle").textContent =
+          "Players can't have the same character";
+        document.querySelector("#characterPlayerTwoTitle").textContent =
+          "Players can't have the same character";
       } else {
         window[func](
           playerOneName,
@@ -334,22 +312,61 @@ function getUserInfo() {
         );
       }
     } else {
-      var playerOneName = document.getElementById("playerOneName").value;
-      var playerOneCharacter = document.getElementById("characterPlayerOne")
+      let playerOneName = document.getElementById("playerOneName").value;
+      let playerOneCharacter = document.getElementById("characterPlayerOne")
         .value;
-      window[func](playerOneName, playerOneCharacter, "computer", "😈");
+      window[func](playerOneName, playerOneCharacter, "Computer", "😈");
     }
   };
 }
 
+const userInfo = new GetUserInfo();
+
+function GameMode() {
+  this.render = (dialog) => {
+    initialBox();
+    document.getElementById("dialogboxbody").innerHTML =
+      "<h2 id='nameInputTitle'>" + dialog + "</h2>";
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+    let mode = null;
+    document.querySelector("#mode1").addEventListener("click", function () {
+      mode = 1;
+      userInfo.render("Player", "checkInput", mode);
+    });
+    document.querySelector("#mode2").addEventListener("click", function () {
+      mode = 2;
+      userInfo.render("Player ", "checkInput", mode);
+    });
+  };
+}
+
+const gameType = new GameMode();
+
 function getEmptySpaces(gameData) {
   let EMPTY = [];
 
-  for (let id = 0; id < gameData.length; id++) {
+  for (let id = 0; id < gameData.length; id += 1) {
     if (!gameData[id]) EMPTY.push(id);
   }
 
   return EMPTY;
+}
+
+function isTie() {
+  if (getEmptySpaces(board.cells).length === 0) {
+    info.textContent = "TIE: No winners this time!";
+    document.querySelectorAll(".cell").forEach(function (cell) {
+      cell.style.background = "green";
+    });
+    deleteKeySound();
+    return true;
+  } else {
+    info.textContent = `${currentPlayer.name} is Playing!`;
+    return false;
+  }
 }
 
 function checkTie() {
@@ -369,7 +386,7 @@ function minimax(gameData, PLAYER) {
 
   let moves = [];
 
-  for (let i = 0; i < EMPTY_SPACES.length; i++) {
+  for (let i = 0; i < EMPTY_SPACES.length; i += 1) {
     let id = EMPTY_SPACES[i];
 
     let backup = gameData[id];
@@ -379,7 +396,7 @@ function minimax(gameData, PLAYER) {
     let move = {};
     move.id = id;
 
-    if (PLAYER == player2.character) {
+    if (PLAYER === player2.character) {
       move.evaluation = minimax(gameData, player1.character).evaluation;
     } else {
       move.evaluation = minimax(gameData, player2.character).evaluation;
@@ -392,9 +409,9 @@ function minimax(gameData, PLAYER) {
 
   let bestMove;
 
-  if (PLAYER == player2.character) {
+  if (PLAYER === player2.character) {
     let bestEvaluation = -Infinity;
-    for (let i = 0; i < moves.length; i++) {
+    for (let i = 0; i < moves.length; i += 1) {
       if (moves[i].evaluation > bestEvaluation) {
         bestEvaluation = moves[i].evaluation;
         bestMove = moves[i];
@@ -402,7 +419,7 @@ function minimax(gameData, PLAYER) {
     }
   } else {
     let bestEvaluation = +Infinity;
-    for (let i = 0; i < moves.length; i++) {
+    for (let i = 0; i < moves.length; i += 1) {
       if (moves[i].evaluation < bestEvaluation) {
         bestEvaluation = moves[i].evaluation;
         bestMove = moves[i];
@@ -412,11 +429,6 @@ function minimax(gameData, PLAYER) {
 
   return bestMove;
 }
-
-const gameType = new gameMode();
-const userInfo = new getUserInfo();
-
-//listeners
 
 document.addEventListener(
   "DOMContentLoaded",
