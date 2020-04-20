@@ -20,14 +20,12 @@ const game = (() => {
   laugh.src = "sound/laugh.mp3";
 
   const character = ["😁", "😎", "💩", "😝"];
-  let player1 = "";
-  let player2 = "";
+  const player1 = "";
+  const player2 = "";
   const board = gameBoard.cells;
-  let currentPlayer = "";
+  const currentPlayer = "";
 
-  let row = null;
-  let winnerCells = "";
-  let gameActive = false;
+  const gameActive = false;
   const info = document.querySelector("#info");
   const restart = document.querySelector(".restart");
 
@@ -40,8 +38,6 @@ const game = (() => {
     player2,
     board,
     currentPlayer,
-    row,
-    winnerCells,
     gameActive,
     info,
     restart,
@@ -54,7 +50,7 @@ initialBox();
 function restartGame() {
   if (document.querySelector(".cells")) {
     document.querySelector(".cells").remove();
-    board.cells = ["", "", "", "", "", "", "", "", ""];
+    game.board = ["", "", "", "", "", "", "", "", ""];
   }
 }
 
@@ -136,7 +132,7 @@ function deleteKeySound() {
 function setWinner(cell1, cell2, cell3) {
   const cells = document.querySelector(".cells");
 
-  info.textContent = `${game.currentPlayer.name} is the winner`;
+  game.info.textContent = `${game.currentPlayer.name} is the winner`;
 
   game.gameActive = false;
   setTimeout(() => {
@@ -160,14 +156,14 @@ function getEmptySpaces(gameData) {
 
 function isTie() {
   if (getEmptySpaces(game.board).length === 0) {
-    info.textContent = "TIE: No winners this time!";
+    game.info.textContent = "TIE: No winners this time!";
     document.querySelectorAll(".cell").forEach((cell) => {
       cell.style.background = "green";
     });
     deleteKeySound();
     return true;
   }
-  info.textContent = `${game.currentPlayer.name} is Playing!`;
+  game.info.textContent = `${game.currentPlayer.name} is Playing!`;
   return false;
 }
 
@@ -232,10 +228,11 @@ function minimax(gameData, PLAYER) {
 }
 
 const start = () => {
+  let winnerCells = "";
   game.gameActive = true;
-  info.textContent = `${game.currentPlayer.name} is playing!`;
+  game.info.textContent = `${game.currentPlayer.name} is playing!`;
   game.restart.textContent = "Restart Game";
-  row = document.createElement("div");
+  let row = document.createElement("div");
   row.classList.add("row", "cells");
   for (let i = 0; i < game.board.length; i += 1) {
     const cell = document.createElement("div");
