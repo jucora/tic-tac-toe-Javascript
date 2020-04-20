@@ -34,7 +34,7 @@ body {
 }
 #dialogbox {
   display: none;
-  position: fixed;
+  position: absolute;
   background: #d6d6d6;
   border-radius: 7px;
   width: 550px;
