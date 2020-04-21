@@ -2,32 +2,32 @@
 /* global initialBox, dialogBoxesPlayers, selectGameMode */
 
 const gameBoard = (() => {
-  const cells = ['', '', '', '', '', '', '', '', ''];
+  const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
 })();
 
-const player = (name, character, rol = 'human') => ({ name, character, rol });
+const player = (name, character, rol = "human") => ({ name, character, rol });
 
 const game = (() => {
   const whoopie = new Audio();
-  whoopie.src = 'sound/whoopie.mp3';
+  whoopie.src = "sound/whoopie.mp3";
   const hereWeGo = new Audio();
-  hereWeGo.src = 'sound/here_we_go.mp3';
+  hereWeGo.src = "sound/here_we_go.mp3";
   const monkey = new Audio();
-  monkey.src = 'sound/monkey.mp3';
+  monkey.src = "sound/monkey.mp3";
   monkey.loop = true;
   const laugh = new Audio();
-  laugh.src = 'sound/laugh.mp3';
+  laugh.src = "sound/laugh.mp3";
 
-  const character = ['😁', '😎', '💩', '😝'];
-  const player1 = '';
-  const player2 = '';
+  const character = ["😁", "😎", "💩", "😝"];
+  const player1 = "";
+  const player2 = "";
   const board = gameBoard.cells;
-  const currentPlayer = '';
+  const currentPlayer = "";
 
   const gameActive = false;
-  const info = document.querySelector('#info');
-  const restart = document.querySelector('.restart');
+  const info = document.querySelector("#info");
+  const restart = document.querySelector(".restart");
 
   return {
     hereWeGo,
@@ -48,74 +48,74 @@ const game = (() => {
 initialBox();
 
 function restartGame() {
-  if (document.querySelector('.cells')) {
-    document.querySelector('.cells').remove();
-    game.board = ['', '', '', '', '', '', '', '', ''];
+  if (document.querySelector(".cells")) {
+    document.querySelector(".cells").remove();
+    game.board = ["", "", "", "", "", "", "", "", ""];
   }
 }
 
 const checkWinner = (board, currentPlayer) => {
   if (
-    board[0] === board[1]
-    && board[1] === board[2]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[1] &&
+    board[1] === board[2] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 1, 2];
   }
   if (
-    board[3] === board[4]
-    && board[4] === board[5]
-    && board[3] === currentPlayer
-    && currentPlayer !== ''
+    board[3] === board[4] &&
+    board[4] === board[5] &&
+    board[3] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 3, 4, 5];
   }
   if (
-    board[6] === board[7]
-    && board[7] === board[8]
-    && board[6] === currentPlayer
-    && currentPlayer !== ''
+    board[6] === board[7] &&
+    board[7] === board[8] &&
+    board[6] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 6, 7, 8];
   }
   if (
-    board[0] === board[3]
-    && board[3] === board[6]
-    && board[0] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[3] &&
+    board[3] === board[6] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 3, 6];
   }
   if (
-    board[1] === board[4]
-    && board[4] === board[7]
-    && board[1] === currentPlayer
-    && currentPlayer !== ''
+    board[1] === board[4] &&
+    board[4] === board[7] &&
+    board[1] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 1, 4, 7];
   }
   if (
-    board[2] === board[5]
-    && board[5] === board[8]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[2] === board[5] &&
+    board[5] === board[8] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 2, 5, 8];
   }
   if (
-    board[0] === board[4]
-    && board[4] === board[8]
-    && board[0] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[4] &&
+    board[4] === board[8] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 4, 8];
   }
   if (
-    board[2] === board[4]
-    && board[4] === board[6]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[2] === board[4] &&
+    board[4] === board[6] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 2, 4, 6];
   }
@@ -124,13 +124,13 @@ const checkWinner = (board, currentPlayer) => {
 
 function deleteKeySound() {
   game.currentPlayer = null;
-  document.querySelectorAll('.cell').forEach((c) => {
-    c.removeAttribute('onmousedown');
+  document.querySelectorAll(".cell").forEach((c) => {
+    c.removeAttribute("onmousedown");
   });
 }
 
 function setWinner(cell1, cell2, cell3) {
-  const cells = document.querySelector('.cells');
+  const cells = document.querySelector(".cells");
 
   game.info.textContent = `${game.currentPlayer.name} is the winner`;
 
@@ -139,9 +139,9 @@ function setWinner(cell1, cell2, cell3) {
     game.laugh.play();
   }, 500);
   deleteKeySound();
-  cells.children[cell1].style.background = 'green';
-  cells.children[cell2].style.background = 'green';
-  cells.children[cell3].style.background = 'green';
+  cells.children[cell1].style.background = "green";
+  cells.children[cell2].style.background = "green";
+  cells.children[cell3].style.background = "green";
 }
 
 function getEmptySpaces(gameData) {
@@ -156,9 +156,9 @@ function getEmptySpaces(gameData) {
 
 function isTie() {
   if (getEmptySpaces(game.board).length === 0) {
-    game.info.textContent = 'TIE: No winners this time!';
-    document.querySelectorAll('.cell').forEach((cell) => {
-      cell.style.background = 'green';
+    game.info.textContent = "TIE: No winners this time!";
+    document.querySelectorAll(".cell").forEach((cell) => {
+      cell.style.background = "green";
     });
     deleteKeySound();
     return true;
@@ -228,23 +228,12 @@ function minimax(gameData, PLAYER) {
 }
 
 const start = () => {
-  let winnerCells = '';
+  let winnerCells = "";
   game.gameActive = true;
-  game.info.textContent = `${game.currentPlayer.name} is playing!`;
-  game.restart.textContent = 'Restart Game';
-  const row = document.createElement('div');
-  row.classList.add('row', 'cells');
-  for (let i = 0; i < game.board.length; i += 1) {
-    const cell = document.createElement('div');
-    cell.classList.add('col-4', 'cell');
-    cell.setAttribute('onmousedown', 'game.whoopie.play()');
-    row.appendChild(cell);
-  }
-  document.querySelector('.container').appendChild(row);
-
-  document.querySelectorAll('.cell').forEach((cell, index) => {
-    cell.addEventListener('click', () => {
-      if (cell.textContent === '' && game.gameActive) {
+  displayGame();
+  document.querySelectorAll(".cell").forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+      if (cell.textContent === "" && game.gameActive) {
         game.board[index] = game.currentPlayer.character;
         if (game.currentPlayer === game.player1) {
           cell.textContent = game.currentPlayer.character;
@@ -257,16 +246,17 @@ const start = () => {
             isTie();
           }
           if (
-            game.currentPlayer === game.player2
-            && game.currentPlayer.rol === 'computer'
+            game.currentPlayer === game.player2 &&
+            game.currentPlayer.rol === "computer"
           ) {
             const { id } = minimax(game.board, game.player2.character);
             game.board[id] = game.currentPlayer.character;
-            document.querySelector('.cells').children[id].textContent = game.currentPlayer.character;
+            document.querySelector(".cells").children[id].textContent =
+              game.currentPlayer.character;
             if (checkWinner(game.board, game.currentPlayer.character)) {
               winnerCells = checkWinner(
                 game.board,
-                game.currentPlayer.character,
+                game.currentPlayer.character
               );
 
               setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
@@ -276,8 +266,8 @@ const start = () => {
             }
           }
         } else if (
-          game.currentPlayer === game.player2
-          && game.currentPlayer.rol === 'human'
+          game.currentPlayer === game.player2 &&
+          game.currentPlayer.rol === "human"
         ) {
           cell.textContent = game.currentPlayer.character;
           if (checkWinner(game.board, game.currentPlayer.character)) {
@@ -295,30 +285,34 @@ const start = () => {
 };
 
 function checkInput(name1, index1, name2, index2, mode) {
-  if (name1 === '') {
-    document.getElementById('namePlayerOneTitle').textContent = "Name can't be empty!";
-    document.getElementById('playerOneName').style.background = '#F78070';
-  } else if (name2 === '') {
-    document.getElementById('namePlayerTwoTitle').textContent = "Name can't be empty!";
-    document.getElementById('playerTwoName').style.background = '#F78070';
+  if (name1 === "") {
+    document.getElementById("namePlayerOneTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("playerOneName").style.background = "#F78070";
+  } else if (name2 === "") {
+    document.getElementById("namePlayerTwoTitle").textContent =
+      "Name can't be empty!";
+    document.getElementById("playerTwoName").style.background = "#F78070";
   }
 
-  if (index1 < 1 || index1 > 4 || index1 === '') {
-    document.getElementById('characterPlayerOneTitle').textContent = 'Please select a valid character between 1 to 4';
-    document.getElementById('characterPlayerOne').style.background = '#F78070';
-  } else if (index2 < 1 || index2 > 4 || index2 === '') {
-    document.getElementById('characterPlayerTwoTitle').textContent = 'Please select a valid character between 1 to 4';
-    document.getElementById('characterPlayerTwo').style.background = '#F78070';
+  if (index1 < 1 || index1 > 4 || index1 === "") {
+    document.getElementById("characterPlayerOneTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerOne").style.background = "#F78070";
+  } else if (index2 < 1 || index2 > 4 || index2 === "") {
+    document.getElementById("characterPlayerTwoTitle").textContent =
+      "Please select a valid character between 1 to 4";
+    document.getElementById("characterPlayerTwo").style.background = "#F78070";
   } else {
     game.player1 = player(name1, game.character[index1 - 1]);
     if (mode === 2) {
       game.player2 = player(name2, game.character[index2 - 1]);
     } else {
       game.player2 = player(name2, index2);
-      game.player2.rol = 'computer';
+      game.player2.rol = "computer";
     }
-    document.getElementById('dialogbox').style.display = 'none';
-    document.getElementById('dialogoverlay').style.display = 'none';
+    document.getElementById("dialogbox").style.display = "none";
+    document.getElementById("dialogoverlay").style.display = "none";
     game.hereWeGo.play();
     setTimeout(() => {
       game.monkey.play();
@@ -334,43 +328,47 @@ function GetUserInfo() {
     initialBox();
     let dialogDetail;
     if (mode === 1) {
-      dialogDetail = ' name';
+      dialogDetail = " name";
     } else {
-      dialogDetail = ' 1 name';
+      dialogDetail = " 1 name";
     }
     dialogBoxesPlayers(dialog, func, mode, dialogDetail);
   };
   this.ok = (func) => {
-    if (document.getElementById('playerTwoName')) {
-      const playerOneName = document.getElementById('playerOneName').value;
-      const playerOneCharacter = document.getElementById('characterPlayerOne')
+    if (document.getElementById("playerTwoName")) {
+      const playerOneName = document.getElementById("playerOneName").value;
+      const playerOneCharacter = document.getElementById("characterPlayerOne")
         .value;
-      const playerTwoName = document.getElementById('playerTwoName').value;
-      const playerTwoCharacter = document.getElementById('characterPlayerTwo')
+      const playerTwoName = document.getElementById("playerTwoName").value;
+      const playerTwoCharacter = document.getElementById("characterPlayerTwo")
         .value;
-      if (playerOneName === playerTwoName && playerOneName !== '') {
-        document.querySelector('#namePlayerTwoTitle').textContent = "Player's names should be different!";
-        document.querySelector('#namePlayerOneTitle').textContent = "Player's names should be different!";
+      if (playerOneName === playerTwoName && playerOneName !== "") {
+        document.querySelector("#namePlayerTwoTitle").textContent =
+          "Player's names should be different!";
+        document.querySelector("#namePlayerOneTitle").textContent =
+          "Player's names should be different!";
       } else if (
-        playerOneCharacter === playerTwoCharacter
-        && playerOneCharacter !== ''
+        playerOneCharacter === playerTwoCharacter &&
+        playerOneCharacter !== ""
       ) {
-        document.querySelector('#characterPlayerOneTitle').textContent = "Players can't have the same character";
-        document.querySelector('#characterPlayerTwoTitle').textContent = "Players can't have the same character";
+        document.querySelector("#characterPlayerOneTitle").textContent =
+          "Players can't have the same character";
+        document.querySelector("#characterPlayerTwoTitle").textContent =
+          "Players can't have the same character";
       } else {
         window[func](
           playerOneName,
           playerOneCharacter,
           playerTwoName,
           playerTwoCharacter,
-          2,
+          2
         );
       }
     } else {
-      const playerOneName = document.getElementById('playerOneName').value;
-      const playerOneCharacter = document.getElementById('characterPlayerOne')
+      const playerOneName = document.getElementById("playerOneName").value;
+      const playerOneCharacter = document.getElementById("characterPlayerOne")
         .value;
-      window[func](playerOneName, playerOneCharacter, 'Computer', '😈');
+      window[func](playerOneName, playerOneCharacter, "Computer", "😈");
     }
   };
 }
@@ -382,13 +380,13 @@ function GameMode() {
     initialBox();
     selectGameMode(dialog);
     let mode = null;
-    document.querySelector('#mode1').addEventListener('click', () => {
+    document.querySelector("#mode1").addEventListener("click", () => {
       mode = 1;
-      userInfo.render('Player', 'checkInput', mode);
+      userInfo.render("Player", "checkInput", mode);
     });
-    document.querySelector('#mode2').addEventListener('click', () => {
+    document.querySelector("#mode2").addEventListener("click", () => {
       mode = 2;
-      userInfo.render('Player ', 'checkInput', mode);
+      userInfo.render("Player ", "checkInput", mode);
     });
   };
 }
@@ -396,10 +394,10 @@ function GameMode() {
 const gameType = new GameMode();
 
 document.addEventListener(
-  'DOMContentLoaded',
-  gameType.render('Please select the game mode'),
+  "DOMContentLoaded",
+  gameType.render("Please select the game mode")
 );
 
-document.querySelector('.restart').addEventListener('click', () => {
-  gameType.render('');
+document.querySelector(".restart").addEventListener("click", () => {
+  gameType.render("");
 });
