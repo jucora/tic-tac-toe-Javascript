@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* global character, game */
+/* global character, game, info, row:writable */
 function initialBox() {
   const winW = window.innerWidth;
   const winH = window.innerHeight;
@@ -57,14 +57,14 @@ function selectGameMode(dialog) {
 
 function displayGame() {
   info.textContent = `${game.currentPlayer.name} is playing!`;
-  game.restart.textContent = "Restart Game";
-  row = document.createElement("div");
-  row.classList.add("row", "cells");
+  game.restart.textContent = 'Restart Game';
+  row = document.createElement('div');
+  row.classList.add('row', 'cells');
   for (let i = 0; i < game.board.length; i += 1) {
-    const cell = document.createElement("div");
-    cell.classList.add("col-4", "cell");
-    cell.setAttribute("onmousedown", "game.whoopie.play()");
+    const cell = document.createElement('div');
+    cell.classList.add('col-4', 'cell');
+    cell.setAttribute('onmousedown', 'game.whoopie.play()');
     row.appendChild(cell);
   }
-  document.querySelector(".container").appendChild(row);
+  document.querySelector('.container').appendChild(row);
 }
