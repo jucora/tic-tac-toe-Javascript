@@ -399,5 +399,5 @@ document.addEventListener(
 );
 
 document.querySelector(".restart").addEventListener("click", () => {
-  gameType.render("");
+  gameType.render("Please select the game mode");
 });
