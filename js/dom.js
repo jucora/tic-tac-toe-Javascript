@@ -57,3 +57,17 @@ function selectGameMode(dialog) {
   document.getElementById("dialogboxbody").innerHTML +=
     '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
 }
+
+function displayGame() {
+  info.textContent = `${game.currentPlayer.name} is playing!`;
+  game.restart.textContent = "Restart Game";
+  row = document.createElement("div");
+  row.classList.add("row", "cells");
+  for (let i = 0; i < game.board.length; i += 1) {
+    const cell = document.createElement("div");
+    cell.classList.add("col-4", "cell");
+    cell.setAttribute("onmousedown", "game.whoopie.play()");
+    row.appendChild(cell);
+  }
+  document.querySelector(".container").appendChild(row);
+}

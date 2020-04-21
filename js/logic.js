@@ -23,6 +23,7 @@ const game = (() => {
   let player1 = "";
   let player2 = "";
   const board = gameBoard.cells;
+  const boardWin = gameBoard.winnerCombinations;
   let currentPlayer = "";
 
   let row = null;
@@ -39,6 +40,7 @@ const game = (() => {
     player1,
     player2,
     board,
+    boardWin,
     currentPlayer,
     row,
     winnerCells,
@@ -54,7 +56,7 @@ initialBox();
 function restartGame() {
   if (document.querySelector(".cells")) {
     document.querySelector(".cells").remove();
-    board.cells = ["", "", "", "", "", "", "", "", ""];
+    game.board = ["", "", "", "", "", "", "", "", ""];
   }
 }
 
@@ -233,18 +235,7 @@ function minimax(gameData, PLAYER) {
 
 const start = () => {
   game.gameActive = true;
-  info.textContent = `${game.currentPlayer.name} is playing!`;
-  game.restart.textContent = "Restart Game";
-  row = document.createElement("div");
-  row.classList.add("row", "cells");
-  for (let i = 0; i < game.board.length; i += 1) {
-    const cell = document.createElement("div");
-    cell.classList.add("col-4", "cell");
-    cell.setAttribute("onmousedown", "game.whoopie.play()");
-    row.appendChild(cell);
-  }
-  document.querySelector(".container").appendChild(row);
-
+  displayGame();
   document.querySelectorAll(".cell").forEach((cell, index) => {
     cell.addEventListener("click", () => {
       if (cell.textContent === "" && game.gameActive) {
