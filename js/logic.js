@@ -124,18 +124,13 @@ const checkWinner = (board, currentPlayer) => {
 };
 
 function setWinner(cell1, cell2, cell3) {
-  const cells = document.querySelector(".cells");
-
-  game.info.textContent = `${game.currentPlayer.name} is the winner`;
-
+  const cells = getCells();
+  displayWinner(cells, cell1, cell2, cell3);
   game.gameActive = false;
   setTimeout(() => {
     game.laugh.play();
   }, 500);
   deleteKeySound();
-  cells.children[cell1].style.background = "green";
-  cells.children[cell2].style.background = "green";
-  cells.children[cell3].style.background = "green";
 }
 
 function getEmptySpaces(gameData) {

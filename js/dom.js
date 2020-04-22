@@ -29,6 +29,13 @@ const deleteKeySound = () => {
   });
 };
 
+const displayWinner = (cells, cell1, cell2, cell3) => {
+  game.info.textContent = `${game.currentPlayer.name} is the winner`;
+  cells.children[cell1].style.background = "green";
+  cells.children[cell2].style.background = "green";
+  cells.children[cell3].style.background = "green";
+};
+
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   document.getElementById(
     "dialogboxbody"
