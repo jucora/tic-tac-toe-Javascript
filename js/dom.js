@@ -29,11 +29,22 @@ const deleteKeySound = () => {
   });
 };
 
+const gameInfo = (message) => {
+  game.info.textContent = message;
+};
+
 const displayWinner = (cells, cell1, cell2, cell3) => {
-  game.info.textContent = `${game.currentPlayer.name} is the winner`;
+  gameInfo(`${game.currentPlayer.name} is the winner`);
   cells.children[cell1].style.background = "green";
   cells.children[cell2].style.background = "green";
   cells.children[cell3].style.background = "green";
+};
+
+const displayTie = () => {
+  gameInfo("TIE: No winners this time!");
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.style.background = "green";
+  });
 };
 
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {

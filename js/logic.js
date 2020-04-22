@@ -145,14 +145,12 @@ function getEmptySpaces(gameData) {
 
 function isTie() {
   if (getEmptySpaces(game.board).length === 0) {
-    game.info.textContent = "TIE: No winners this time!";
-    document.querySelectorAll(".cell").forEach((cell) => {
-      cell.style.background = "green";
-    });
+    displayTie();
     deleteKeySound();
+    game.currentPlayer = null;
     return true;
   }
-  game.info.textContent = `${game.currentPlayer.name} is Playing!`;
+  gameInfo(`${game.currentPlayer.name} is Playing!`);
   return false;
 }
 
