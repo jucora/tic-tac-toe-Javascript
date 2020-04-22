@@ -214,61 +214,57 @@ function minimax(gameData, PLAYER) {
   return bestMove;
 }
 
-const start = () => {
+function gameControl(cell, index) {
   let winnerCells = "";
-  game.gameActive = true;
-  displayGame();
-  document.querySelectorAll(".cell").forEach((cell, index) => {
-    cell.addEventListener("click", () => {
-      if (cell.textContent === "" && game.gameActive) {
-        game.board[index] = game.currentPlayer.character;
-        if (game.currentPlayer === game.player1) {
-          cell.textContent = game.currentPlayer.character;
-          if (checkWinner(game.board, game.currentPlayer.character)) {
-            winnerCells = checkWinner(game.board, game.currentPlayer.character);
+  if (cell.textContent === "" && game.gameActive) {
+    game.board[index] = game.currentPlayer.character;
+    if (game.currentPlayer === game.player1) {
+      cell.textContent = game.currentPlayer.character;
+      if (checkWinner(game.board, game.currentPlayer.character)) {
+        winnerCells = checkWinner(game.board, game.currentPlayer.character);
 
-            setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-          } else {
-            game.currentPlayer = game.player2;
-            isTie();
-          }
-          if (
-            game.currentPlayer === game.player2 &&
-            game.currentPlayer.rol === "computer"
-          ) {
-            const { id } = minimax(game.board, game.player2.character);
-            game.board[id] = game.currentPlayer.character;
-            document.querySelector(".cells").children[id].textContent =
-              game.currentPlayer.character;
-            if (checkWinner(game.board, game.currentPlayer.character)) {
-              winnerCells = checkWinner(
-                game.board,
-                game.currentPlayer.character
-              );
+        setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+      } else {
+        game.currentPlayer = game.player2;
+        isTie();
+      }
+      if (
+        game.currentPlayer === game.player2 &&
+        game.currentPlayer.rol === "computer"
+      ) {
+        const { id } = minimax(game.board, game.player2.character);
+        game.board[id] = game.currentPlayer.character;
+        document.querySelector(".cells").children[id].textContent =
+          game.currentPlayer.character;
+        if (checkWinner(game.board, game.currentPlayer.character)) {
+          winnerCells = checkWinner(game.board, game.currentPlayer.character);
 
-              setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-            } else {
-              game.currentPlayer = game.player1;
-              isTie();
-            }
-          }
-        } else if (
-          game.currentPlayer === game.player2 &&
-          game.currentPlayer.rol === "human"
-        ) {
-          cell.textContent = game.currentPlayer.character;
-          if (checkWinner(game.board, game.currentPlayer.character)) {
-            winnerCells = checkWinner(game.board, game.currentPlayer.character);
-
-            setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-          } else {
-            game.currentPlayer = game.player1;
-            isTie();
-          }
+          setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+        } else {
+          game.currentPlayer = game.player1;
+          isTie();
         }
       }
-    });
-  });
+    } else if (
+      game.currentPlayer === game.player2 &&
+      game.currentPlayer.rol === "human"
+    ) {
+      cell.textContent = game.currentPlayer.character;
+      if (checkWinner(game.board, game.currentPlayer.character)) {
+        winnerCells = checkWinner(game.board, game.currentPlayer.character);
+
+        setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+      } else {
+        game.currentPlayer = game.player1;
+        isTie();
+      }
+    }
+  }
+}
+
+const start = () => {
+  game.gameActive = true;
+  displayGame();
 };
 
 function checkInput(name1, index1, name2, index2, mode) {
