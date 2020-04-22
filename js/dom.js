@@ -23,6 +23,12 @@ const removeGame = () => {
   gameType.render("Please select the game mode");
 };
 
+const deleteKeySound = () => {
+  document.querySelectorAll(".cell").forEach((c) => {
+    c.removeAttribute("onmousedown");
+  });
+};
+
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   document.getElementById(
     "dialogboxbody"

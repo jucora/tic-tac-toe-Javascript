@@ -123,13 +123,6 @@ const checkWinner = (board, currentPlayer) => {
   return false;
 };
 
-function deleteKeySound() {
-  game.currentPlayer = null;
-  document.querySelectorAll(".cell").forEach((c) => {
-    c.removeAttribute("onmousedown");
-  });
-}
-
 function setWinner(cell1, cell2, cell3) {
   const cells = document.querySelector(".cells");
 
