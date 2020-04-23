@@ -47,7 +47,7 @@ const displayTie = () => {
   });
 };
 
-function displayGame() {
+const displayGame = () => {
   info.textContent = `${game.currentPlayer.name} is playing!`;
   game.restart.textContent = "Restart Game";
   row = document.createElement("div");
@@ -65,7 +65,20 @@ function displayGame() {
       gameControl(cell, index);
     });
   });
-}
+};
+
+const cellContent = (cell) => {
+  return cell.textContent;
+};
+
+const drawPlayerMove = (cell) => {
+  cell.textContent = game.currentPlayer.character;
+};
+
+const drawComputerMove = (id) => {
+  document.querySelector(".cells").children[id].textContent =
+    game.currentPlayer.character;
+};
 
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   document.getElementById(

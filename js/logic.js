@@ -214,50 +214,39 @@ function minimax(gameData, PLAYER) {
   return bestMove;
 }
 
+function winnerOrTie() {
+  if (checkWinner(game.board, game.currentPlayer.character)) {
+    winnerCells = checkWinner(game.board, game.currentPlayer.character);
+    setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+  } else {
+    game.currentPlayer =
+      game.currentPlayer === game.player1 ? game.player2 : game.player1;
+    isTie();
+  }
+}
+
 function gameControl(cell, index) {
   let winnerCells = "";
-  if (cell.textContent === "" && game.gameActive) {
+  if (cellContent(cell) === "" && game.gameActive) {
     game.board[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
-      cell.textContent = game.currentPlayer.character;
-      if (checkWinner(game.board, game.currentPlayer.character)) {
-        winnerCells = checkWinner(game.board, game.currentPlayer.character);
-
-        setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-      } else {
-        game.currentPlayer = game.player2;
-        isTie();
-      }
+      drawPlayerMove(cell);
+      winnerOrTie();
       if (
         game.currentPlayer === game.player2 &&
         game.currentPlayer.rol === "computer"
       ) {
         const { id } = minimax(game.board, game.player2.character);
         game.board[id] = game.currentPlayer.character;
-        document.querySelector(".cells").children[id].textContent =
-          game.currentPlayer.character;
-        if (checkWinner(game.board, game.currentPlayer.character)) {
-          winnerCells = checkWinner(game.board, game.currentPlayer.character);
-
-          setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-        } else {
-          game.currentPlayer = game.player1;
-          isTie();
-        }
+        drawComputerMove(id);
+        winnerOrTie();
       }
     } else if (
       game.currentPlayer === game.player2 &&
       game.currentPlayer.rol === "human"
     ) {
-      cell.textContent = game.currentPlayer.character;
-      if (checkWinner(game.board, game.currentPlayer.character)) {
-        winnerCells = checkWinner(game.board, game.currentPlayer.character);
-
-        setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-      } else {
-        game.currentPlayer = game.player1;
-        isTie();
-      }
+      drawPlayerMove(cell);
+      winnerOrTie();
     }
   }
 }
