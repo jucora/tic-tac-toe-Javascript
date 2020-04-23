@@ -178,3 +178,10 @@ document.addEventListener(
 );
 
 document.querySelector(".restart").addEventListener("click", restartGame);
+
+document.querySelector("#mode1").addEventListener("click", () => {
+  takeGameMode(1);
+});
+document.querySelector("#mode2").addEventListener("click", () => {
+  takeGameMode(2);
+});

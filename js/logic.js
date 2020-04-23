@@ -339,15 +339,6 @@ function GameMode() {
   this.render = (dialog) => {
     initialBox();
     selectGameMode(dialog);
-    let mode = null;
-    document.querySelector("#mode1").addEventListener("click", () => {
-      mode = 1;
-      takeGameMode(mode);
-    });
-    document.querySelector("#mode2").addEventListener("click", () => {
-      mode = 2;
-      takeGameMode(mode);
-    });
   };
 }
 const gameType = new GameMode();
