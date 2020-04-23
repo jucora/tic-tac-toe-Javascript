@@ -167,3 +167,14 @@ function selectGameMode(dialog) {
   document.getElementById("dialogboxbody").innerHTML +=
     '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
 }
+
+const takeGameMode = (mode) => {
+  userInfo.render("Player", "checkInput", mode);
+};
+
+document.addEventListener(
+  "DOMContentLoaded",
+  gameType.render("Please select the game mode")
+);
+
+document.querySelector(".restart").addEventListener("click", restartGame);

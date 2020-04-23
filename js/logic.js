@@ -342,20 +342,12 @@ function GameMode() {
     let mode = null;
     document.querySelector("#mode1").addEventListener("click", () => {
       mode = 1;
-      userInfo.render("Player", "checkInput", mode);
+      takeGameMode(mode);
     });
     document.querySelector("#mode2").addEventListener("click", () => {
       mode = 2;
-      userInfo.render("Player ", "checkInput", mode);
+      takeGameMode(mode);
     });
   };
 }
-
 const gameType = new GameMode();
-
-document.addEventListener(
-  "DOMContentLoaded",
-  gameType.render("Please select the game mode")
-);
-
-document.querySelector(".restart").addEventListener("click", restartGame);
