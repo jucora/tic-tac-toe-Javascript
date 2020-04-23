@@ -45,8 +45,6 @@ const game = (() => {
   };
 })();
 
-initialBox();
-
 function restartGame() {
   cellsContainer = getCells();
   if (cellsContainer) {
@@ -215,6 +213,7 @@ function minimax(gameData, PLAYER) {
 }
 
 function winnerOrTie() {
+  let winnerCells = "";
   if (checkWinner(game.board, game.currentPlayer.character)) {
     winnerCells = checkWinner(game.board, game.currentPlayer.character);
     setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
@@ -226,7 +225,6 @@ function winnerOrTie() {
 }
 
 function gameControl(cell, index) {
-  let winnerCells = "";
   if (cellContent(cell) === "" && game.gameActive) {
     game.board[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
@@ -305,26 +303,19 @@ function GetUserInfo() {
     dialogBoxesPlayers(dialog, func, mode, dialogDetail);
   };
   this.ok = (func) => {
-    if (document.getElementById("playerTwoName")) {
-      const playerOneName = document.getElementById("playerOneName").value;
-      const playerOneCharacter = document.getElementById("characterPlayerOne")
-        .value;
-      const playerTwoName = document.getElementById("playerTwoName").value;
-      const playerTwoCharacter = document.getElementById("characterPlayerTwo")
-        .value;
+    if (checkInputPlayerTwo()) {
+      let playerOneName = getPlayersInputs()[0];
+      let playerOneCharacter = getPlayersInputs()[1];
+      let playerTwoName = getPlayersInputs()[2];
+      let playerTwoCharacter = getPlayersInputs()[3];
+
       if (playerOneName === playerTwoName && playerOneName !== "") {
-        document.querySelector("#namePlayerTwoTitle").textContent =
-          "Player's names should be different!";
-        document.querySelector("#namePlayerOneTitle").textContent =
-          "Player's names should be different!";
+        sameNames();
       } else if (
         playerOneCharacter === playerTwoCharacter &&
         playerOneCharacter !== ""
       ) {
-        document.querySelector("#characterPlayerOneTitle").textContent =
-          "Players can't have the same character";
-        document.querySelector("#characterPlayerTwoTitle").textContent =
-          "Players can't have the same character";
+        sameCharacters();
       } else {
         window[func](
           playerOneName,
@@ -335,9 +326,8 @@ function GetUserInfo() {
         );
       }
     } else {
-      const playerOneName = document.getElementById("playerOneName").value;
-      const playerOneCharacter = document.getElementById("characterPlayerOne")
-        .value;
+      let playerOneName = getPlayerOneInput()[0];
+      let playerOneCharacter = getPlayerOneInput()[1];
       window[func](playerOneName, playerOneCharacter, "Computer", "😈");
     }
   };

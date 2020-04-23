@@ -1,19 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* global character, game, info, row:writable */
-function initialBox() {
-  const winW = window.innerWidth;
-  const winH = window.innerHeight;
-  const dialogoverlay = document.getElementById("dialogoverlay");
-  const dialogbox = document.getElementById("dialogbox");
-  dialogoverlay.style.display = "block";
-  dialogoverlay.style.height = `${winH}px`;
-  dialogbox.style.left = `${winW / 2 - 550 * 0.5}px`;
-  dialogbox.style.top = "100px";
-  dialogbox.style.display = "block";
-  document.getElementById("dialogboxhead").innerHTML =
-    "Welcome to the Tic Tac Toe Game!";
-}
-
 const getCells = () => {
   return document.querySelector(".cells");
 };
@@ -90,6 +76,20 @@ const removeDialogBox = () => {
   document.getElementById("dialogoverlay").style.display = "none";
 };
 
+function initialBox() {
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  const dialogoverlay = document.getElementById("dialogoverlay");
+  const dialogbox = document.getElementById("dialogbox");
+  dialogoverlay.style.display = "block";
+  dialogoverlay.style.height = `${winH}px`;
+  dialogbox.style.left = `${winW / 2 - 550 * 0.5}px`;
+  dialogbox.style.top = "100px";
+  dialogbox.style.display = "block";
+  document.getElementById("dialogboxhead").innerHTML =
+    "Welcome to the Tic Tac Toe Game!";
+}
+
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   document.getElementById(
     "dialogboxbody"
@@ -121,6 +121,42 @@ function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
     "dialogboxfoot"
   ).innerHTML = `<button class = 'btn btn-primary form-control' onclick="userInfo.ok('${func}')">OK`;
 }
+
+const checkInputPlayerTwo = () => {
+  return document.getElementById("playerTwoName");
+};
+
+const getPlayersInputs = () => {
+  const playerOneName = document.getElementById("playerOneName").value;
+  const playerOneCharacter = document.getElementById("characterPlayerOne")
+    .value;
+  const playerTwoName = document.getElementById("playerTwoName").value;
+  const playerTwoCharacter = document.getElementById("characterPlayerTwo")
+    .value;
+
+  return [playerOneName, playerOneCharacter, playerTwoName, playerTwoCharacter];
+};
+
+const sameNames = () => {
+  document.querySelector("#namePlayerTwoTitle").textContent =
+    "Player's names should be different!";
+  document.querySelector("#namePlayerOneTitle").textContent =
+    "Player's names should be different!";
+};
+
+const sameCharacters = () => {
+  document.querySelector("#characterPlayerOneTitle").textContent =
+    "Players can't have the same character";
+  document.querySelector("#characterPlayerTwoTitle").textContent =
+    "Players can't have the same character";
+};
+
+const getPlayerOneInput = () => {
+  const playerOneName = document.getElementById("playerOneName").value;
+  const playerOneCharacter = document.getElementById("characterPlayerOne")
+    .value;
+  return [playerOneName, playerOneCharacter];
+};
 
 function selectGameMode(dialog) {
   document.getElementById(
