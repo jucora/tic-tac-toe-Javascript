@@ -258,23 +258,23 @@ const start = () => {
 
 function checkInput(name1, index1, name2, index2, mode) {
   if (name1 === "") {
-    document.getElementById("namePlayerOneTitle").textContent =
-      "Name can't be empty!";
-    document.getElementById("playerOneName").style.background = "#F78070";
+    validInput("namePlayerOneTitle", "playerOneName", "Name can't be empty!");
   } else if (name2 === "") {
-    document.getElementById("namePlayerTwoTitle").textContent =
-      "Name can't be empty!";
-    document.getElementById("playerTwoName").style.background = "#F78070";
+    validInput("namePlayerTwoTitle", "playerTwoName", "Name can't be empty!");
   }
 
   if (index1 < 1 || index1 > 4 || index1 === "") {
-    document.getElementById("characterPlayerOneTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerOne").style.background = "#F78070";
+    validInput(
+      "characterPlayerOneTitle",
+      "characterPlayerOne",
+      "Please select a valid character between 1 to 4"
+    );
   } else if (index2 < 1 || index2 > 4 || index2 === "") {
-    document.getElementById("characterPlayerTwoTitle").textContent =
-      "Please select a valid character between 1 to 4";
-    document.getElementById("characterPlayerTwo").style.background = "#F78070";
+    validInput(
+      "characterPlayerTwoTitle",
+      "characterPlayerTwo",
+      "Please select a valid character between 1 to 4"
+    );
   } else {
     game.player1 = player(name1, game.character[index1 - 1]);
     if (mode === 2) {
@@ -283,8 +283,7 @@ function checkInput(name1, index1, name2, index2, mode) {
       game.player2 = player(name2, index2);
       game.player2.rol = "computer";
     }
-    document.getElementById("dialogbox").style.display = "none";
-    document.getElementById("dialogoverlay").style.display = "none";
+    removeDialogBox();
     game.hereWeGo.play();
     setTimeout(() => {
       game.monkey.play();

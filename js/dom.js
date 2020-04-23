@@ -80,6 +80,16 @@ const drawComputerMove = (id) => {
     game.currentPlayer.character;
 };
 
+const validInput = (text, input, message) => {
+  document.getElementById(text).textContent = message;
+  document.getElementById(input).style.background = "#F78070";
+};
+
+const removeDialogBox = () => {
+  document.getElementById("dialogbox").style.display = "none";
+  document.getElementById("dialogoverlay").style.display = "none";
+};
+
 function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   document.getElementById(
     "dialogboxbody"
