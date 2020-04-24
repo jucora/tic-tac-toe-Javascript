@@ -38,7 +38,7 @@ export const displayTie = () => {
 export const displayGame = () => {
   info.textContent = `${game.currentPlayer.name} is playing!`;
   game.restart.textContent = "Restart Game";
-  row = document.createElement("div");
+  let row = document.createElement("div");
   row.classList.add("row", "cells");
   for (let i = 0; i < game.board.length; i += 1) {
     const cell = document.createElement("div");
@@ -119,9 +119,13 @@ export function dialogBoxesPlayers(dialog, mode, dialogDetail) {
       game.character[3]
     }</h2><input id='characterPlayerTwo'class = 'form-control'>`;
   }
-  document.getElementById(
-    "dialogboxfoot"
-  ).innerHTML = `<button class = 'btn btn-primary form-control' onclick='${userInfo.ok()}'>OK`;
+  let okButton = document.createElement("BUTTON");
+  okButton.innerHTML = "OK";
+  okButton.classList.add("btn", "btn-primary", "form-control");
+  okButton.addEventListener("click", function () {
+    userInfo.ok();
+  });
+  document.getElementById("dialogboxfoot").appendChild(okButton); //`<button class = 'btn btn-primary form-control' onclick='${userInfo.ok}'>OK`;
 }
 
 export const checkInputPlayerTwo = () => {

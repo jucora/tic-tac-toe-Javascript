@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* global initialBox, dialogBoxesPlayers, selectGameMode, displayGame */
-
+require("../css/style.css");
+require("../css/bootstrap.css");
 import {
   getCells,
   removeGame,
@@ -282,6 +283,8 @@ function checkInput(name1, index1, name2, index2, mode) {
     validInput("namePlayerOneTitle", "playerOneName", "Name can't be empty!");
   } else if (name2 === "") {
     validInput("namePlayerTwoTitle", "playerTwoName", "Name can't be empty!");
+  } else if (name1 === name2 && name1 !== "") {
+    sameNames();
   }
 
   if (index1 < 1 || index1 > 4 || index1 === "") {
@@ -296,6 +299,8 @@ function checkInput(name1, index1, name2, index2, mode) {
       "characterPlayerTwo",
       "Please select a valid character between 1 to 4"
     );
+  } else if (index1 === index2 && index1 !== "") {
+    sameCharacters();
   } else {
     game.player1 = player(name1, game.character[index1 - 1]);
     if (mode === 2) {
@@ -327,29 +332,19 @@ function GetUserInfo() {
     dialogBoxesPlayers(dialog, mode, dialogDetail);
   };
   this.ok = () => {
-    console.log("entrando");
+    console.log("adentro");
     if (checkInputPlayerTwo()) {
       let playerOneName = getPlayersInputs()[0];
       let playerOneCharacter = getPlayersInputs()[1];
       let playerTwoName = getPlayersInputs()[2];
       let playerTwoCharacter = getPlayersInputs()[3];
-
-      if (playerOneName === playerTwoName && playerOneName !== "") {
-        sameNames();
-      } else if (
-        playerOneCharacter === playerTwoCharacter &&
-        playerOneCharacter !== ""
-      ) {
-        sameCharacters();
-      } else {
-        checkInput(
-          playerOneName,
-          playerOneCharacter,
-          playerTwoName,
-          playerTwoCharacter,
-          2
-        );
-      }
+      checkInput(
+        playerOneName,
+        playerOneCharacter,
+        playerTwoName,
+        playerTwoCharacter,
+        2
+      );
     } else {
       let playerOneName = getPlayerOneInput()[0];
       let playerOneCharacter = getPlayerOneInput()[1];
