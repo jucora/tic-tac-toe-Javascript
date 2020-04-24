@@ -2,10 +2,10 @@
 /* global initialBox, dialogBoxesPlayers, selectGameMode, displayGame */
 require("../css/style.css");
 require("../css/bootstrap.css");
+
 import {
   getCells,
   removeGame,
-  deleteKeySound,
   gameInfo,
   displayWinner,
   displayTie,
@@ -34,14 +34,14 @@ const player = (name, character, rol = "human") => ({ name, character, rol });
 
 export const game = (() => {
   const whoopie = new Audio();
-  whoopie.src = "sound/whoopie.mp3";
+  whoopie.src = "../sound/whoopie.mp3";
   const hereWeGo = new Audio();
-  hereWeGo.src = "sound/here_we_go.mp3";
+  hereWeGo.src = "../sound/here_we_go.mp3";
   const monkey = new Audio();
-  monkey.src = "sound/monkey.mp3";
+  monkey.src = "../sound/monkey.mp3";
   monkey.loop = true;
   const laugh = new Audio();
-  laugh.src = "sound/laugh.mp3";
+  laugh.src = "../sound/laugh.mp3";
 
   const character = ["😁", "😎", "💩", "😝"];
   const player1 = "";
@@ -152,7 +152,6 @@ function setWinner(cell1, cell2, cell3) {
   setTimeout(() => {
     game.laugh.play();
   }, 500);
-  deleteKeySound();
 }
 
 function getEmptySpaces(gameData) {
@@ -168,7 +167,7 @@ function getEmptySpaces(gameData) {
 function isTie() {
   if (getEmptySpaces(game.board).length === 0) {
     displayTie();
-    deleteKeySound();
+    game.gameActive = false;
     game.currentPlayer = null;
     return true;
   }
@@ -272,6 +271,12 @@ export function gameControl(cell, index) {
     }
   }
 }
+
+export const playWhoopie = () => {
+  if (game.gameActive) {
+    game.whoopie.play();
+  }
+};
 
 const start = () => {
   game.gameActive = true;

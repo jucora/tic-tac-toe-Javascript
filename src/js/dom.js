@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* global character, game, info, row:writable */
-import { gameType, restartGame, userInfo, game, gameControl } from "./logic";
+import {
+  gameType,
+  restartGame,
+  userInfo,
+  game,
+  gameControl,
+  playWhoopie,
+} from "./logic";
 
 export const getCells = () => {
   return document.querySelector(".cells");
@@ -9,12 +16,6 @@ export const getCells = () => {
 export const removeGame = () => {
   document.querySelector(".cells").remove();
   gameType.render("Please select the game mode");
-};
-
-export const deleteKeySound = () => {
-  document.querySelectorAll(".cell").forEach((c) => {
-    c.removeAttribute("onmousedown");
-  });
 };
 
 export const gameInfo = (message) => {
@@ -43,13 +44,13 @@ export const displayGame = () => {
   for (let i = 0; i < game.board.length; i += 1) {
     const cell = document.createElement("div");
     cell.classList.add("col-4", "cell");
-    cell.setAttribute("onmousedown", "whoopie.play()");
     row.appendChild(cell);
   }
   document.querySelector(".container").appendChild(row);
 
   document.querySelectorAll(".cell").forEach((cell, index) => {
-    cell.addEventListener("click", () => {
+    cell.addEventListener("click", function () {
+      playWhoopie();
       gameControl(cell, index);
     });
   });
