@@ -1,39 +1,41 @@
 /* eslint-disable no-unused-vars */
 /* global character, game, info, row:writable */
-const getCells = () => {
+import { gameType, restartGame, userInfo, game, gameControl } from "./logic";
+
+export const getCells = () => {
   return document.querySelector(".cells");
 };
 
-const removeGame = () => {
+export const removeGame = () => {
   document.querySelector(".cells").remove();
   gameType.render("Please select the game mode");
 };
 
-const deleteKeySound = () => {
+export const deleteKeySound = () => {
   document.querySelectorAll(".cell").forEach((c) => {
     c.removeAttribute("onmousedown");
   });
 };
 
-const gameInfo = (message) => {
+export const gameInfo = (message) => {
   game.info.textContent = message;
 };
 
-const displayWinner = (cells, cell1, cell2, cell3) => {
+export const displayWinner = (cells, cell1, cell2, cell3) => {
   gameInfo(`${game.currentPlayer.name} is the winner`);
   cells.children[cell1].style.background = "green";
   cells.children[cell2].style.background = "green";
   cells.children[cell3].style.background = "green";
 };
 
-const displayTie = () => {
+export const displayTie = () => {
   gameInfo("TIE: No winners this time!");
   document.querySelectorAll(".cell").forEach((cell) => {
     cell.style.background = "green";
   });
 };
 
-const displayGame = () => {
+export const displayGame = () => {
   info.textContent = `${game.currentPlayer.name} is playing!`;
   game.restart.textContent = "Restart Game";
   row = document.createElement("div");
@@ -41,7 +43,7 @@ const displayGame = () => {
   for (let i = 0; i < game.board.length; i += 1) {
     const cell = document.createElement("div");
     cell.classList.add("col-4", "cell");
-    cell.setAttribute("onmousedown", "game.whoopie.play()");
+    cell.setAttribute("onmousedown", "whoopie.play()");
     row.appendChild(cell);
   }
   document.querySelector(".container").appendChild(row);
@@ -53,30 +55,30 @@ const displayGame = () => {
   });
 };
 
-const cellContent = (cell) => {
+export const cellContent = (cell) => {
   return cell.textContent;
 };
 
-const drawPlayerMove = (cell) => {
+export const drawPlayerMove = (cell) => {
   cell.textContent = game.currentPlayer.character;
 };
 
-const drawComputerMove = (id) => {
+export const drawComputerMove = (id) => {
   document.querySelector(".cells").children[id].textContent =
     game.currentPlayer.character;
 };
 
-const validInput = (text, input, message) => {
+export const validInput = (text, input, message) => {
   document.getElementById(text).textContent = message;
   document.getElementById(input).style.background = "#F78070";
 };
 
-const removeDialogBox = () => {
+export const removeDialogBox = () => {
   document.getElementById("dialogbox").style.display = "none";
   document.getElementById("dialogoverlay").style.display = "none";
 };
 
-function initialBox() {
+export function initialBox() {
   const winW = window.innerWidth;
   const winH = window.innerHeight;
   const dialogoverlay = document.getElementById("dialogoverlay");
@@ -90,7 +92,7 @@ function initialBox() {
     "Welcome to the Tic Tac Toe Game!";
 }
 
-function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
+export function dialogBoxesPlayers(dialog, mode, dialogDetail) {
   document.getElementById(
     "dialogboxbody"
   ).innerHTML = `<h2 id='namePlayerOneTitle'>${dialog}${dialogDetail}</h2>`;
@@ -119,14 +121,14 @@ function dialogBoxesPlayers(dialog, func, mode, dialogDetail) {
   }
   document.getElementById(
     "dialogboxfoot"
-  ).innerHTML = `<button class = 'btn btn-primary form-control' onclick="userInfo.ok('${func}')">OK`;
+  ).innerHTML = `<button class = 'btn btn-primary form-control' onclick='${userInfo.ok()}'>OK`;
 }
 
-const checkInputPlayerTwo = () => {
+export const checkInputPlayerTwo = () => {
   return document.getElementById("playerTwoName");
 };
 
-const getPlayersInputs = () => {
+export const getPlayersInputs = () => {
   const playerOneName = document.getElementById("playerOneName").value;
   const playerOneCharacter = document.getElementById("characterPlayerOne")
     .value;
@@ -137,28 +139,28 @@ const getPlayersInputs = () => {
   return [playerOneName, playerOneCharacter, playerTwoName, playerTwoCharacter];
 };
 
-const sameNames = () => {
+export const sameNames = () => {
   document.querySelector("#namePlayerTwoTitle").textContent =
     "Player's names should be different!";
   document.querySelector("#namePlayerOneTitle").textContent =
     "Player's names should be different!";
 };
 
-const sameCharacters = () => {
+export const sameCharacters = () => {
   document.querySelector("#characterPlayerOneTitle").textContent =
     "Players can't have the same character";
   document.querySelector("#characterPlayerTwoTitle").textContent =
     "Players can't have the same character";
 };
 
-const getPlayerOneInput = () => {
+export const getPlayerOneInput = () => {
   const playerOneName = document.getElementById("playerOneName").value;
   const playerOneCharacter = document.getElementById("characterPlayerOne")
     .value;
   return [playerOneName, playerOneCharacter];
 };
 
-function selectGameMode(dialog) {
+export function selectGameMode(dialog) {
   document.getElementById(
     "dialogboxbody"
   ).innerHTML = `<h2 id='nameInputTitle'>${dialog}</h2>`;
@@ -168,8 +170,8 @@ function selectGameMode(dialog) {
     '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
 }
 
-const takeGameMode = (mode) => {
-  userInfo.render("Player", "checkInput", mode);
+export const takeGameMode = (mode) => {
+  userInfo.render("Player", mode);
 };
 
 document.addEventListener(

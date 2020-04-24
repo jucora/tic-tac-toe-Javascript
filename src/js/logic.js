@@ -1,6 +1,29 @@
 /* eslint-disable no-unused-vars */
 /* global initialBox, dialogBoxesPlayers, selectGameMode, displayGame */
 
+import {
+  getCells,
+  removeGame,
+  deleteKeySound,
+  gameInfo,
+  displayWinner,
+  displayTie,
+  displayGame,
+  cellContent,
+  drawPlayerMove,
+  drawComputerMove,
+  validInput,
+  removeDialogBox,
+  initialBox,
+  dialogBoxesPlayers,
+  checkInputPlayerTwo,
+  getPlayersInputs,
+  sameNames,
+  sameCharacters,
+  getPlayerOneInput,
+  selectGameMode,
+} from "./dom.js";
+
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
@@ -8,7 +31,7 @@ const gameBoard = (() => {
 
 const player = (name, character, rol = "human") => ({ name, character, rol });
 
-const game = (() => {
+export const game = (() => {
   const whoopie = new Audio();
   whoopie.src = "sound/whoopie.mp3";
   const hereWeGo = new Audio();
@@ -45,8 +68,8 @@ const game = (() => {
   };
 })();
 
-function restartGame() {
-  cellsContainer = getCells();
+export function restartGame() {
+  let cellsContainer = getCells();
   if (cellsContainer) {
     removeGame();
     game.board = ["", "", "", "", "", "", "", "", ""];
@@ -224,7 +247,7 @@ function winnerOrTie() {
   }
 }
 
-function gameControl(cell, index) {
+export function gameControl(cell, index) {
   if (cellContent(cell) === "" && game.gameActive) {
     game.board[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
@@ -292,17 +315,19 @@ function checkInput(name1, index1, name2, index2, mode) {
 }
 
 function GetUserInfo() {
-  this.render = (dialog, func, mode) => {
+  this.render = (dialog, mode) => {
     initialBox();
+
     let dialogDetail;
     if (mode === 1) {
       dialogDetail = " name";
     } else {
       dialogDetail = " 1 name";
     }
-    dialogBoxesPlayers(dialog, func, mode, dialogDetail);
+    dialogBoxesPlayers(dialog, mode, dialogDetail);
   };
-  this.ok = (func) => {
+  this.ok = () => {
+    console.log("entrando");
     if (checkInputPlayerTwo()) {
       let playerOneName = getPlayersInputs()[0];
       let playerOneCharacter = getPlayersInputs()[1];
@@ -317,7 +342,7 @@ function GetUserInfo() {
       ) {
         sameCharacters();
       } else {
-        window[func](
+        checkInput(
           playerOneName,
           playerOneCharacter,
           playerTwoName,
@@ -328,12 +353,12 @@ function GetUserInfo() {
     } else {
       let playerOneName = getPlayerOneInput()[0];
       let playerOneCharacter = getPlayerOneInput()[1];
-      window[func](playerOneName, playerOneCharacter, "Computer", "😈");
+      checkInput(playerOneName, playerOneCharacter, "Computer", "😈");
     }
   };
 }
 
-const userInfo = new GetUserInfo();
+export const userInfo = new GetUserInfo();
 
 function GameMode() {
   this.render = (dialog) => {
@@ -341,4 +366,4 @@ function GameMode() {
     selectGameMode(dialog);
   };
 }
-const gameType = new GameMode();
+export const gameType = new GameMode();
