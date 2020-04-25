@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-import { player, game } from './Factories';
+import { player, game } from './factories';
 
 require('../css/style.css');
 require('../css/bootstrap.css');
