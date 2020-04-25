@@ -1,54 +1,33 @@
-require("../css/style.css");
-require("../css/bootstrap.css");
-import {
-  getCells,
-  removeGame,
-  gameInfo,
-  displayWinner,
-  displayTie,
-  displayGame,
-  cellContent,
-  drawPlayerMove,
-  drawComputerMove,
-  validInput,
-  removeDialogBox,
-  initialBox,
-  dialogBoxesPlayers,
-  checkInputPlayerTwo,
-  getPlayersInputs,
-  sameNames,
-  sameCharacters,
-  getPlayerOneInput,
-  selectGameMode,
-} from "./dom";
+require('../css/style.css');
+require('../css/bootstrap.css');
 
 const gameBoard = (() => {
-  const cells = ["", "", "", "", "", "", "", "", ""];
+  const cells = ['', '', '', '', '', '', '', '', ''];
   return { cells };
 })();
 
-const player = (name, character, rol = "human") => ({ name, character, rol });
+const player = (name, character, rol = 'human') => ({ name, character, rol });
 
-export const game = (() => {
+const game = (() => {
   const whoopie = new Audio();
-  whoopie.src = "../sound/whoopie.mp3";
+  whoopie.src = '../sound/whoopie.mp3';
   const hereWeGo = new Audio();
-  hereWeGo.src = "../sound/here_we_go.mp3";
+  hereWeGo.src = '../sound/here_we_go.mp3';
   const monkey = new Audio();
-  monkey.src = "../sound/monkey.mp3";
+  monkey.src = '../sound/monkey.mp3';
   monkey.loop = true;
   const laugh = new Audio();
-  laugh.src = "../sound/laugh.mp3";
+  laugh.src = '../sound/laugh.mp3';
 
-  const character = ["😁", "😎", "💩", "😝"];
-  const player1 = "";
-  const player2 = "";
+  const character = ['😁', '😎', '💩', '😝'];
+  const player1 = '';
+  const player2 = '';
   const board = gameBoard.cells;
-  const currentPlayer = "";
+  const currentPlayer = '';
 
   const gameActive = false;
-  const info = document.querySelector("#info");
-  const restart = document.querySelector(".restart");
+  const info = document.querySelector('#info');
+  const restart = document.querySelector('.restart');
 
   return {
     hereWeGo,
@@ -66,81 +45,148 @@ export const game = (() => {
   };
 })();
 
-export function restartGame() {
-  const cellsContainer = getCells();
-  if (cellsContainer) {
-    removeGame();
-    game.board = ["", "", "", "", "", "", "", "", ""];
-  }
+function initialBox() {
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  const dialogoverlay = document.getElementById('dialogoverlay');
+  const dialogbox = document.getElementById('dialogbox');
+  dialogoverlay.style.display = 'block';
+  dialogoverlay.style.height = `${winH}px`;
+  dialogbox.style.left = `${winW / 2 - 550 * 0.5}px`;
+  dialogbox.style.top = '100px';
+  dialogbox.style.display = 'block';
+  document.getElementById('dialogboxhead').innerHTML = 'Welcome to the Tic Tac Toe Game!';
 }
+
+const checkInputPlayerTwo = () => document.getElementById('playerTwoName');
+
+const getPlayersInputs = () => {
+  const playerOneName = document.getElementById('playerOneName').value;
+  const playerOneCharacter = document.getElementById('characterPlayerOne')
+    .value;
+  const playerTwoName = document.getElementById('playerTwoName').value;
+  const playerTwoCharacter = document.getElementById('characterPlayerTwo')
+    .value;
+
+  return [playerOneName, playerOneCharacter, playerTwoName, playerTwoCharacter];
+};
+
+const validInput = (text, input, message) => {
+  document.getElementById(text).textContent = message;
+  document.getElementById(input).style.background = '#F78070';
+};
+
+const sameNames = () => {
+  document.querySelector('#namePlayerTwoTitle').textContent = "Player's names should be different!";
+  document.querySelector('#namePlayerOneTitle').textContent = "Player's names should be different!";
+};
+
+const sameCharacters = () => {
+  document.querySelector('#characterPlayerOneTitle').textContent = "Players can't have the same character";
+  document.querySelector('#characterPlayerTwoTitle').textContent = "Players can't have the same character";
+};
+
+const removeDialogBox = () => {
+  document.getElementById('dialogbox').style.display = 'none';
+  document.getElementById('dialogoverlay').style.display = 'none';
+};
+
+const playWhoopie = () => {
+  if (game.gameActive) {
+    game.whoopie.play();
+  }
+};
+
+const cellContent = (cell) => cell.textContent;
+
+const drawPlayerMove = (cell) => {
+  cell.textContent = game.currentPlayer.character;
+};
+
+const drawComputerMove = (id) => {
+  document.querySelector('.cells').children[id].textContent = game.currentPlayer.character;
+};
 
 const checkWinner = (board, currentPlayer) => {
   if (
-    board[0] === board[1] &&
-    board[1] === board[2] &&
-    board[2] === currentPlayer &&
-    currentPlayer !== ""
+    board[0] === board[1]
+    && board[1] === board[2]
+    && board[2] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 0, 1, 2];
   }
   if (
-    board[3] === board[4] &&
-    board[4] === board[5] &&
-    board[3] === currentPlayer &&
-    currentPlayer !== ""
+    board[3] === board[4]
+    && board[4] === board[5]
+    && board[3] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 3, 4, 5];
   }
   if (
-    board[6] === board[7] &&
-    board[7] === board[8] &&
-    board[6] === currentPlayer &&
-    currentPlayer !== ""
+    board[6] === board[7]
+    && board[7] === board[8]
+    && board[6] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 6, 7, 8];
   }
   if (
-    board[0] === board[3] &&
-    board[3] === board[6] &&
-    board[0] === currentPlayer &&
-    currentPlayer !== ""
+    board[0] === board[3]
+    && board[3] === board[6]
+    && board[0] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 0, 3, 6];
   }
   if (
-    board[1] === board[4] &&
-    board[4] === board[7] &&
-    board[1] === currentPlayer &&
-    currentPlayer !== ""
+    board[1] === board[4]
+    && board[4] === board[7]
+    && board[1] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 1, 4, 7];
   }
   if (
-    board[2] === board[5] &&
-    board[5] === board[8] &&
-    board[2] === currentPlayer &&
-    currentPlayer !== ""
+    board[2] === board[5]
+    && board[5] === board[8]
+    && board[2] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 2, 5, 8];
   }
   if (
-    board[0] === board[4] &&
-    board[4] === board[8] &&
-    board[0] === currentPlayer &&
-    currentPlayer !== ""
+    board[0] === board[4]
+    && board[4] === board[8]
+    && board[0] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 0, 4, 8];
   }
   if (
-    board[2] === board[4] &&
-    board[4] === board[6] &&
-    board[2] === currentPlayer &&
-    currentPlayer !== ""
+    board[2] === board[4]
+    && board[4] === board[6]
+    && board[2] === currentPlayer
+    && currentPlayer !== ''
   ) {
     return [true, 2, 4, 6];
   }
   return false;
 };
+
+const gameInfo = (message) => {
+  game.info.textContent = message;
+};
+
+const displayWinner = (cells, cell1, cell2, cell3) => {
+  gameInfo(`${game.currentPlayer.name} is the winner`);
+  cells.children[cell1].style.background = 'green';
+  cells.children[cell2].style.background = 'green';
+  cells.children[cell3].style.background = 'green';
+};
+
+const getCells = () => document.querySelector('.cells');
 
 function setWinner(cell1, cell2, cell3) {
   const cells = getCells();
@@ -161,6 +207,13 @@ function getEmptySpaces(gameData) {
   return EMPTY;
 }
 
+const displayTie = () => {
+  gameInfo('TIE: No winners this time!');
+  document.querySelectorAll('.cell').forEach((cell) => {
+    cell.style.background = 'green';
+  });
+};
+
 function isTie() {
   if (getEmptySpaces(game.board).length === 0) {
     displayTie();
@@ -170,6 +223,17 @@ function isTie() {
   }
   gameInfo(`${game.currentPlayer.name} is Playing!`);
   return false;
+}
+
+function winnerOrTie() {
+  let winnerCells = '';
+  if (checkWinner(game.board, game.currentPlayer.character)) {
+    winnerCells = checkWinner(game.board, game.currentPlayer.character);
+    setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+  } else {
+    game.currentPlayer = game.currentPlayer === game.player1 ? game.player2 : game.player1;
+    isTie();
+  }
 }
 
 function checkTie() {
@@ -232,27 +296,15 @@ function minimax(gameData, PLAYER) {
   return bestMove;
 }
 
-function winnerOrTie() {
-  let winnerCells = "";
-  if (checkWinner(game.board, game.currentPlayer.character)) {
-    winnerCells = checkWinner(game.board, game.currentPlayer.character);
-    setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
-  } else {
-    game.currentPlayer =
-      game.currentPlayer === game.player1 ? game.player2 : game.player1;
-    isTie();
-  }
-}
-
-export function gameControl(cell, index) {
-  if (cellContent(cell) === "" && game.gameActive) {
+function gameControl(cell, index) {
+  if (cellContent(cell) === '' && game.gameActive) {
     game.board[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
       drawPlayerMove(cell);
       winnerOrTie();
       if (
-        game.currentPlayer === game.player2 &&
-        game.currentPlayer.rol === "computer"
+        game.currentPlayer === game.player2
+        && game.currentPlayer.rol === 'computer'
       ) {
         const { id } = minimax(game.board, game.player2.character);
         game.board[id] = game.currentPlayer.character;
@@ -260,8 +312,8 @@ export function gameControl(cell, index) {
         winnerOrTie();
       }
     } else if (
-      game.currentPlayer === game.player2 &&
-      game.currentPlayer.rol === "human"
+      game.currentPlayer === game.player2
+      && game.currentPlayer.rol === 'human'
     ) {
       drawPlayerMove(cell);
       winnerOrTie();
@@ -269,10 +321,24 @@ export function gameControl(cell, index) {
   }
 }
 
-export const playWhoopie = () => {
-  if (game.gameActive) {
-    game.whoopie.play();
+const displayGame = () => {
+  game.info.textContent = `${game.currentPlayer.name} is playing!`;
+  game.restart.textContent = 'Restart Game';
+  const row = document.createElement('div');
+  row.classList.add('row', 'cells');
+  for (let i = 0; i < game.board.length; i += 1) {
+    const cell = document.createElement('div');
+    cell.classList.add('col-4', 'cell');
+    row.appendChild(cell);
   }
+  document.querySelector('.container').appendChild(row);
+
+  document.querySelectorAll('.cell').forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+      playWhoopie();
+      gameControl(cell, index);
+    });
+  });
 };
 
 const start = () => {
@@ -281,27 +347,27 @@ const start = () => {
 };
 
 function checkInput(name1, index1, name2, index2, mode) {
-  if (name1 === "") {
-    validInput("namePlayerOneTitle", "playerOneName", "Name can't be empty!");
-  } else if (name2 === "") {
-    validInput("namePlayerTwoTitle", "playerTwoName", "Name can't be empty!");
-  } else if (name1 === name2 && name1 !== "") {
+  if (name1 === '') {
+    validInput('namePlayerOneTitle', 'playerOneName', "Name can't be empty!");
+  } else if (name2 === '') {
+    validInput('namePlayerTwoTitle', 'playerTwoName', "Name can't be empty!");
+  } else if (name1 === name2 && name1 !== '') {
     sameNames();
   }
 
-  if (index1 < 1 || index1 > 4 || index1 === "") {
+  if (index1 < 1 || index1 > 4 || index1 === '') {
     validInput(
-      "characterPlayerOneTitle",
-      "characterPlayerOne",
-      "Please select a valid character between 1 to 4"
+      'characterPlayerOneTitle',
+      'characterPlayerOne',
+      'Please select a valid character between 1 to 4',
     );
-  } else if (index2 < 1 || index2 > 4 || index2 === "") {
+  } else if (index2 < 1 || index2 > 4 || index2 === '') {
     validInput(
-      "characterPlayerTwoTitle",
-      "characterPlayerTwo",
-      "Please select a valid character between 1 to 4"
+      'characterPlayerTwoTitle',
+      'characterPlayerTwo',
+      'Please select a valid character between 1 to 4',
     );
-  } else if (index1 === index2 && index1 !== "") {
+  } else if (index1 === index2 && index1 !== '') {
     sameCharacters();
   } else {
     game.player1 = player(name1, game.character[index1 - 1]);
@@ -309,7 +375,7 @@ function checkInput(name1, index1, name2, index2, mode) {
       game.player2 = player(name2, game.character[index2 - 1]);
     } else {
       game.player2 = player(name2, index2);
-      game.player2.rol = "computer";
+      game.player2.rol = 'computer';
     }
     removeDialogBox();
     game.hereWeGo.play();
@@ -321,20 +387,62 @@ function checkInput(name1, index1, name2, index2, mode) {
   }
 }
 
+function dialogBoxesPlayers(dialog, mode, dialogDetail) {
+  document.getElementById(
+    'dialogboxbody',
+  ).innerHTML = `<h2 id='namePlayerOneTitle'>${dialog}${dialogDetail}</h2>`;
+
+  document.getElementById('dialogboxbody').innerHTML
+    += '<br><input id="playerOneName" class = "form-control">';
+  document.getElementById('dialogboxbody').innerHTML += `${
+    "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>"
+    + ' 1)'
+  }${game.character[0]} 2)${game.character[1]} 3)${game.character[2]} 4)${
+    game.character[3]
+  }</h2><input id='characterPlayerOne'class = 'form-control'>`;
+
+  if (mode === 2) {
+    document.getElementById(
+      'dialogboxbody',
+    ).innerHTML += `<br><hr><br><h2 id='namePlayerTwoTitle'>${dialog} 2 name</h2>`;
+    document.getElementById('dialogboxbody').innerHTML
+      += '<br><input id="playerTwoName" class = "form-control">';
+    document.getElementById('dialogboxbody').innerHTML += `${
+      "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>"
+      + ' 1)'
+    }${game.character[0]} 2)${game.character[1]} 3)${game.character[2]} 4)${
+      game.character[3]
+    }</h2><input id='characterPlayerTwo'class = 'form-control'>`;
+  }
+  const okButton = document.createElement('BUTTON');
+  okButton.innerHTML = 'OK';
+  okButton.classList.add('btn', 'btn-primary', 'form-control');
+  okButton.addEventListener('click', () => {
+    userInfo.ok();
+  });
+  document.getElementById('dialogboxfoot').appendChild(okButton);
+}
+
+const getPlayerOneInput = () => {
+  const playerOneName = document.getElementById('playerOneName').value;
+  const playerOneCharacter = document.getElementById('characterPlayerOne')
+    .value;
+  return [playerOneName, playerOneCharacter];
+};
+
 function GetUserInfo() {
   this.render = (dialog, mode) => {
     initialBox();
 
     let dialogDetail;
     if (mode === 1) {
-      dialogDetail = " name";
+      dialogDetail = ' name';
     } else {
-      dialogDetail = " 1 name";
+      dialogDetail = ' 1 name';
     }
     dialogBoxesPlayers(dialog, mode, dialogDetail);
   };
   this.ok = () => {
-    console.log("adentro");
     if (checkInputPlayerTwo()) {
       const playerOneName = getPlayersInputs()[0];
       const playerOneCharacter = getPlayersInputs()[1];
@@ -345,17 +453,38 @@ function GetUserInfo() {
         playerOneCharacter,
         playerTwoName,
         playerTwoCharacter,
-        2
+        2,
       );
     } else {
       const playerOneName = getPlayerOneInput()[0];
       const playerOneCharacter = getPlayerOneInput()[1];
-      checkInput(playerOneName, playerOneCharacter, "Computer", "😈");
+      checkInput(playerOneName, playerOneCharacter, 'Computer', '😈');
     }
   };
 }
 
-export const userInfo = new GetUserInfo();
+const userInfo = new GetUserInfo();
+
+const takeGameMode = (mode) => {
+  userInfo.render('Player', mode);
+};
+
+function selectGameMode(dialog) {
+  document.getElementById(
+    'dialogboxbody',
+  ).innerHTML = `<h2 id='nameInputTitle'>${dialog}</h2>`;
+  document.getElementById('dialogboxbody').innerHTML
+    += '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
+  document.getElementById('dialogboxbody').innerHTML
+    += '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+
+  document.querySelector('#mode1').addEventListener('click', () => {
+    takeGameMode(1);
+  });
+  document.querySelector('#mode2').addEventListener('click', () => {
+    takeGameMode(2);
+  });
+}
 
 function GameMode() {
   this.render = (dialog) => {
@@ -363,4 +492,26 @@ function GameMode() {
     selectGameMode(dialog);
   };
 }
-export const gameType = new GameMode();
+const gameType = new GameMode();
+
+const removeGame = () => {
+  document.querySelector('.cells').remove();
+  gameType.render('Please select the game mode');
+};
+
+function restartGame() {
+  const cellsContainer = getCells();
+  if (cellsContainer) {
+    removeGame();
+    game.board = ['', '', '', '', '', '', '', '', ''];
+  }
+}
+
+// dom
+
+document.addEventListener(
+  'DOMContentLoaded',
+  gameType.render('Please select the game mode'),
+);
+
+document.querySelector('.restart').addEventListener('click', restartGame);
