@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: ["error", { "functions": false }] */
+
 require('../css/style.css');
 require('../css/bootstrap.css');
 
@@ -387,6 +389,47 @@ function checkInput(name1, index1, name2, index2, mode) {
   }
 }
 
+const getPlayerOneInput = () => {
+  const playerOneName = document.getElementById('playerOneName').value;
+  const playerOneCharacter = document.getElementById('characterPlayerOne')
+    .value;
+  return [playerOneName, playerOneCharacter];
+};
+
+function GetUserInfo() {
+  this.render = (dialog, mode) => {
+    initialBox();
+    let dialogDetail;
+    if (mode === 1) {
+      dialogDetail = ' name';
+    } else {
+      dialogDetail = ' 1 name';
+    }
+    dialogBoxesPlayers(dialog, mode, dialogDetail);
+  };
+  this.ok = () => {
+    if (checkInputPlayerTwo()) {
+      const playerOneName = getPlayersInputs()[0];
+      const playerOneCharacter = getPlayersInputs()[1];
+      const playerTwoName = getPlayersInputs()[2];
+      const playerTwoCharacter = getPlayersInputs()[3];
+      checkInput(
+        playerOneName,
+        playerOneCharacter,
+        playerTwoName,
+        playerTwoCharacter,
+        2,
+      );
+    } else {
+      const playerOneName = getPlayerOneInput()[0];
+      const playerOneCharacter = getPlayerOneInput()[1];
+      checkInput(playerOneName, playerOneCharacter, 'Computer', '😈');
+    }
+  };
+}
+
+const userInfo = new GetUserInfo();
+
 function dialogBoxesPlayers(dialog, mode, dialogDetail) {
   document.getElementById(
     'dialogboxbody',
@@ -422,48 +465,6 @@ function dialogBoxesPlayers(dialog, mode, dialogDetail) {
   });
   document.getElementById('dialogboxfoot').appendChild(okButton);
 }
-
-const getPlayerOneInput = () => {
-  const playerOneName = document.getElementById('playerOneName').value;
-  const playerOneCharacter = document.getElementById('characterPlayerOne')
-    .value;
-  return [playerOneName, playerOneCharacter];
-};
-
-function GetUserInfo() {
-  this.render = (dialog, mode) => {
-    initialBox();
-
-    let dialogDetail;
-    if (mode === 1) {
-      dialogDetail = ' name';
-    } else {
-      dialogDetail = ' 1 name';
-    }
-    dialogBoxesPlayers(dialog, mode, dialogDetail);
-  };
-  this.ok = () => {
-    if (checkInputPlayerTwo()) {
-      const playerOneName = getPlayersInputs()[0];
-      const playerOneCharacter = getPlayersInputs()[1];
-      const playerTwoName = getPlayersInputs()[2];
-      const playerTwoCharacter = getPlayersInputs()[3];
-      checkInput(
-        playerOneName,
-        playerOneCharacter,
-        playerTwoName,
-        playerTwoCharacter,
-        2,
-      );
-    } else {
-      const playerOneName = getPlayerOneInput()[0];
-      const playerOneCharacter = getPlayerOneInput()[1];
-      checkInput(playerOneName, playerOneCharacter, 'Computer', '😈');
-    }
-  };
-}
-
-const userInfo = new GetUserInfo();
 
 const takeGameMode = (mode) => {
   userInfo.render('Player', mode);
