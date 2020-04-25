@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* global initialBox, dialogBoxesPlayers, selectGameMode, displayGame */
 require("../css/style.css");
 require("../css/bootstrap.css");
-
 import {
   getCells,
   removeGame,
@@ -23,7 +20,7 @@ import {
   sameCharacters,
   getPlayerOneInput,
   selectGameMode,
-} from "./dom.js";
+} from "./dom";
 
 const gameBoard = (() => {
   const cells = ["", "", "", "", "", "", "", "", ""];
@@ -70,7 +67,7 @@ export const game = (() => {
 })();
 
 export function restartGame() {
-  let cellsContainer = getCells();
+  const cellsContainer = getCells();
   if (cellsContainer) {
     removeGame();
     game.board = ["", "", "", "", "", "", "", "", ""];
@@ -339,10 +336,10 @@ function GetUserInfo() {
   this.ok = () => {
     console.log("adentro");
     if (checkInputPlayerTwo()) {
-      let playerOneName = getPlayersInputs()[0];
-      let playerOneCharacter = getPlayersInputs()[1];
-      let playerTwoName = getPlayersInputs()[2];
-      let playerTwoCharacter = getPlayersInputs()[3];
+      const playerOneName = getPlayersInputs()[0];
+      const playerOneCharacter = getPlayersInputs()[1];
+      const playerTwoName = getPlayersInputs()[2];
+      const playerTwoCharacter = getPlayersInputs()[3];
       checkInput(
         playerOneName,
         playerOneCharacter,
@@ -351,8 +348,8 @@ function GetUserInfo() {
         2
       );
     } else {
-      let playerOneName = getPlayerOneInput()[0];
-      let playerOneCharacter = getPlayerOneInput()[1];
+      const playerOneName = getPlayerOneInput()[0];
+      const playerOneCharacter = getPlayerOneInput()[1];
       checkInput(playerOneName, playerOneCharacter, "Computer", "😈");
     }
   };
