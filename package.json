@@ -1,0 +1,37 @@
+{
+  "name": "tic-tac-toe-Javascript",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">:video_game: Tic Tac Toe Project</h1>",
+  "main": "logic.js",
+  "scripts": {
+    "build": "webpack --mode development",
+    "produccion": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jucora/tic-tac-toe-Javascript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jucora/tic-tac-toe-Javascript/issues"
+  },
+  "homepage": "https://github.com/jucora/tic-tac-toe-Javascript#readme",
+  "devDependencies": {
+    "css-loader": "^3.5.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-import-resolver-webpack": "^0.12.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.20.2",
+    "file-loader": "^6.0.0",
+    "style-loader": "^1.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "aos": "^3.0.0-beta.6"
+  }
+}
