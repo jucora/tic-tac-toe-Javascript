@@ -35,16 +35,6 @@ const validInput = (text, input, message) => {
   document.getElementById(input).style.background = '#F78070';
 };
 
-const sameNames = () => {
-  document.querySelector('#namePlayerTwoTitle').textContent = "Player's names should be different!";
-  document.querySelector('#namePlayerOneTitle').textContent = "Player's names should be different!";
-};
-
-const sameCharacters = () => {
-  document.querySelector('#characterPlayerOneTitle').textContent = "Players can't have the same character";
-  document.querySelector('#characterPlayerTwoTitle').textContent = "Players can't have the same character";
-};
-
 const removeDialogBox = () => {
   document.getElementById('dialogbox').style.display = 'none';
   document.getElementById('dialogoverlay').style.display = 'none';
@@ -318,7 +308,16 @@ const nameValidation = (name1, name2) => {
     return false;
   }
   if (name1 === name2 && name1 !== '') {
-    sameNames();
+    validInput(
+      'namePlayerOneTitle',
+      'playerOneName',
+      'Names have to be different',
+    );
+    validInput(
+      'namePlayerTwoTitle',
+      'playerTwoName',
+      'Names have to be different',
+    );
     return false;
   }
   return true;
@@ -356,8 +355,18 @@ const invalidCharacter = (index1, index2, mode) => {
       );
     }
     return false;
-  } if (index1 === index2 && index1 !== '') {
-    sameCharacters();
+  }
+  if (index1 === index2 && index1 !== '') {
+    validInput(
+      'characterPlayerOneTitle',
+      'characterPlayerOne',
+      'Please select a valid character between 1 to 4',
+    );
+    validInput(
+      'characterPlayerTwoTitle',
+      'characterPlayerTwo',
+      'Please select a valid character between 1 to 4',
+    );
     return false;
   }
   return true;
