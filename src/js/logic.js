@@ -305,9 +305,7 @@ const start = () => {
   displayGame();
 };
 
-function invalidNumber(index) {
-  return !Number.isInteger(parseInt(index));
-}
+const invalidNumber = (index) => !Number.isInteger(parseInt(index, 10));
 
 const nameValidation = (name1, name2) => {
   if (name1 === '' || name2 === '') {
@@ -317,11 +315,13 @@ const nameValidation = (name1, name2) => {
     if (name2 === '') {
       validInput('namePlayerTwoTitle', 'playerTwoName', "Name can't be empty!");
     }
-  } else if (name1 === name2 && name1 !== '') {
-    sameNames();
-  } else {
-    return true;
+    return false;
   }
+  if (name1 === name2 && name1 !== '') {
+    sameNames();
+    return false;
+  }
+  return true;
 };
 
 const invalidCharacter = (index1, index2, mode) => {
@@ -355,11 +355,12 @@ const invalidCharacter = (index1, index2, mode) => {
         'Please select a valid character between 1 to 4',
       );
     }
-  } else if (index1 === index2 && index1 !== '') {
+    return false;
+  } if (index1 === index2 && index1 !== '') {
     sameCharacters();
-  } else {
-    return true;
+    return false;
   }
+  return true;
 };
 
 const checkInput = (name1, index1, name2, index2, mode) => {

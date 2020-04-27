@@ -1,9 +1,9 @@
 export const gameBoard = (() => {
-  const cells = ['', '', '', '', '', '', '', '', ''];
+  const cells = ["", "", "", "", "", "", "", "", ""];
   return { cells };
 })();
 
-export const player = (name, character, rol = 'human') => ({
+export const player = (name, character, rol = "human") => ({
   name,
   character,
   rol,
@@ -11,24 +11,24 @@ export const player = (name, character, rol = 'human') => ({
 
 export const game = (() => {
   const whoopie = new Audio();
-  whoopie.src = '../sound/whoopie.mp3';
+  whoopie.src = "../sound/whoopie.mp3";
   const hereWeGo = new Audio();
-  hereWeGo.src = '../sound/here_we_go.mp3';
+  hereWeGo.src = "../sound/here_we_go.mp3";
   const monkey = new Audio();
-  monkey.src = '../sound/monkey.mp3';
+  monkey.src = "../sound/monkey.mp3";
   monkey.loop = true;
   const laugh = new Audio();
-  laugh.src = '../sound/laugh.mp3';
+  laugh.src = "../sound/laugh.mp3";
 
-  const character = ['😁', '😎', '💩', '😝'];
-  const player1 = '';
-  const player2 = '';
+  const character = ["😁", "😎", "💩", "😝"];
+  const player1 = "";
+  const player2 = "";
   const board = gameBoard.cells;
-  const currentPlayer = '';
+  const currentPlayer = "";
 
   const gameActive = false;
-  const info = document.querySelector('#info');
-  const restart = document.querySelector('.restart');
+  const info = document.querySelector("#info");
+  const restart = document.querySelector(".restart");
 
   return {
     hereWeGo,
