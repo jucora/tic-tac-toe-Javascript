@@ -1,7 +1,7 @@
 <h1 align="center">:video_game: Tic Tac Toe Project</h1>
 
 <p align="center">
-  <img src="images/tictactoe.png">
+  <img src="src/images/tictactoe.png">
 </p>
 
 
@@ -12,7 +12,7 @@ This project is a Tic Tac Toe game. This game contains the minimax algorithm so 
 ## :mag: Minimax Algorithm Example
 
 <p align="center">
-  <img src="images/minimax.png">
+  <img src="src/images/minimax.png">
 </p>
 
 ## :heavy_check_mark: Odin Projet Link 
