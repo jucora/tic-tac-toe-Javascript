@@ -1,3 +1,8 @@
+import whoopieSound from '../sound/whoopie.mp3';
+import hereWeGoSound from '../sound/here_we_go.mp3';
+import monkeySound from '../sound/monkey.mp3';
+import laughSound from '../sound/laugh.mp3';
+
 export const gameBoard = (() => {
   const cells = ['', '', '', '', '', '', '', '', ''];
   return { cells };
@@ -10,15 +15,11 @@ export const player = (name, character, rol = 'human') => ({
 });
 
 export const game = (() => {
-  const whoopie = new Audio();
-  whoopie.src = '../sound/whoopie.mp3';
-  const hereWeGo = new Audio();
-  hereWeGo.src = '../sound/here_we_go.mp3';
-  const monkey = new Audio();
-  monkey.src = '../sound/monkey.mp3';
+  const whoopie = new Audio(whoopieSound);
+  const hereWeGo = new Audio(hereWeGoSound);
+  const monkey = new Audio(monkeySound);
   monkey.loop = true;
-  const laugh = new Audio();
-  laugh.src = '../sound/laugh.mp3';
+  const laugh = new Audio(laughSound);
 
   const character = ['😁', '😎', '💩', '😝'];
   const player1 = '';
