@@ -1,7 +1,7 @@
 <h1 align="center">:video_game: Tic Tac Toe Project</h1>
 
 <p align="center">
-  <img src="images/tictactoe.png">
+  <img src="src/images/tictactoe.png">
 </p>
 
 
@@ -9,10 +9,13 @@
 
 This project is a Tic Tac Toe game. This game contains the minimax algorithm so the player can compete with the computer. The minimax algorithm makes the computer smart so everytime a user select a cell in the game, the computer will answer with the best move always so the computer never loses. In game theory, minimax is a decision method to minimize the maximum expected loss in games with an opponent and with perfect information. Minimax is a recursive algorithm. User can also play with another user This project is part of the Microverse main curriculum.
 
+# :globe_with_meridians: [Live Version](https://jucora.github.io/tic-tac-toe-Javascript/):point_left:
+
+
 ## :mag: Minimax Algorithm Example
 
 <p align="center">
-  <img src="images/minimax.png">
+  <img src="src/images/minimax.png">
 </p>
 
 ## :heavy_check_mark: Odin Projet Link 
