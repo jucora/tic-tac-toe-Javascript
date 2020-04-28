@@ -1,7 +1,9 @@
 import { player, game } from './factories';
 
+
 require('../css/style.css');
 require('../css/bootstrap.css');
+
 
 function initialBox() {
   const winW = window.innerWidth;
