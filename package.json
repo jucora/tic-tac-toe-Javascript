@@ -19,8 +19,9 @@
   "bugs": {
     "url": "https://github.com/jucora/tic-tac-toe-Javascript/issues"
   },
-  "homepage": "https://github.com/jucora/tic-tac-toe-Javascript#readme",
+  "homepage": "https://jucora.github.io/tictactoe",
   "devDependencies": {
+    "@babel/preset-env": "^7.10.2",
     "css-loader": "^3.5.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
@@ -28,11 +29,11 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.20.2",
     "file-loader": "^6.0.0",
+    "jest": "^26.0.1",
     "style-loader": "^1.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
-  "homepage": "https://jucora.github.io/tictactoe",
   "dependencies": {
     "aos": "^3.0.0-beta.6",
     "gh-pages": "^2.2.0"
