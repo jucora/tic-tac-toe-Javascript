@@ -1,33 +1,19 @@
 import { player, game } from './factories';
-
+import initialBox from './initialBox';
 
 require('../css/style.css');
 require('../css/bootstrap.css');
 
-
-function initialBox() {
-  const winW = window.innerWidth;
-  const winH = window.innerHeight;
-  const dialogoverlay = document.getElementById('dialogoverlay');
-  const dialogbox = document.getElementById('dialogbox');
-  dialogoverlay.style.display = 'block';
-  dialogoverlay.style.height = `${winH}px`;
-  dialogbox.style.left = `${winW / 2 - 550 * 0.5}px`;
-  dialogbox.style.top = '100px';
-  dialogbox.style.display = 'block';
-  document.getElementById('dialogboxhead').innerHTML = 'Welcome to the Tic Tac Toe Game!';
-}
-
 const checkInputPlayerTwo = () => document.getElementById('playerTwoName');
 
-const getInputs = () => [
+export const getInputs = () => [
   document.getElementById('playerOneName'),
   document.getElementById('characterPlayerOne'),
   document.getElementById('playerTwoName'),
   document.getElementById('characterPlayerTwo'),
 ];
 
-const getPlayersInputs = () => {
+export const getPlayersInputs = () => {
   const inputs = getInputs();
   return [inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value];
 };
@@ -58,7 +44,7 @@ const drawComputerMove = (id) => {
   document.querySelector('.cells').children[id].textContent = game.currentPlayer.character;
 };
 
-const checkWinner = (board, currentPlayer) => {
+export const checkWinner = (board, currentPlayer) => {
   if (
     board[0] === board[1]
     && board[1] === board[2]
@@ -127,7 +113,10 @@ const checkWinner = (board, currentPlayer) => {
 };
 
 const gameInfo = (message) => {
-  game.info.textContent = message;
+  if (game.info) {
+    // if due to test null error
+    game.info.textContent = message;
+  }
 };
 
 const displayWinner = (cells, cell1, cell2, cell3) => {
@@ -139,16 +128,16 @@ const displayWinner = (cells, cell1, cell2, cell3) => {
 
 const getCells = () => document.querySelector('.cells');
 
-function setWinner(cell1, cell2, cell3) {
+export const setWinner = (cell1, cell2, cell3) => {
   const cells = getCells();
   displayWinner(cells, cell1, cell2, cell3);
   game.gameActive = false;
   setTimeout(() => {
     game.laugh.play();
   }, 500);
-}
+};
 
-function getEmptySpaces(gameData) {
+export const getEmptySpaces = (gameData) => {
   const EMPTY = [];
 
   for (let id = 0; id < gameData.length; id += 1) {
@@ -156,7 +145,7 @@ function getEmptySpaces(gameData) {
   }
 
   return EMPTY;
-}
+};
 
 const displayTie = () => {
   gameInfo('TIE: No winners this time!');
@@ -165,36 +154,41 @@ const displayTie = () => {
   });
 };
 
-function isTie() {
+export const isTie = () => {
   if (getEmptySpaces(game.board).length === 0) {
     displayTie();
     game.gameActive = false;
     game.currentPlayer = null;
     return true;
   }
+
   gameInfo(`${game.currentPlayer.name} is Playing!`);
   return false;
-}
+};
 
-function winnerOrTie() {
-  let winnerCells = '';
+export const winnerOrTie = () => {
+  // let winnerCells = "";
   if (checkWinner(game.board, game.currentPlayer.character)) {
-    winnerCells = checkWinner(game.board, game.currentPlayer.character);
-    setWinner(winnerCells[1], winnerCells[2], winnerCells[3]);
+    // winnerCells = checkWinner(game.board, game.currentPlayer.character);
+    setWinner(
+      checkWinner(game.board, game.currentPlayer.character)[1],
+      checkWinner(game.board, game.currentPlayer.character)[2],
+      checkWinner(game.board, game.currentPlayer.character)[3],
+    );
   } else {
     game.currentPlayer = game.currentPlayer === game.player1 ? game.player2 : game.player1;
     isTie();
   }
-}
+};
 
-function checkTie() {
+export const checkTie = () => {
   if (getEmptySpaces(game.board).length === 0) {
     return true;
   }
   return false;
-}
+};
 
-function minimax(gameData, PLAYER) {
+export const minimax = (gameData, PLAYER) => {
   if (checkWinner(gameData, game.player2.character)) return { evaluation: +10 };
   if (checkWinner(gameData, game.player1.character)) return { evaluation: -10 };
   if (checkTie(gameData)) return { evaluation: 0 };
@@ -245,7 +239,7 @@ function minimax(gameData, PLAYER) {
   }
 
   return bestMove;
-}
+};
 
 function gameControl(cell, index) {
   if (cellContent(cell) === '' && game.gameActive) {
@@ -489,21 +483,23 @@ const takeGameMode = (mode) => {
   userInfo.render('Player', mode);
 };
 
-function selectGameMode(dialog) {
-  document.getElementById(
-    'dialogboxbody',
-  ).innerHTML = `<h2 id='nameInputTitle'>${dialog}</h2>`;
-  document.getElementById('dialogboxbody').innerHTML
-    += '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
-  document.getElementById('dialogboxbody').innerHTML
-    += '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+export function selectGameMode(dialog) {
+  if (document.querySelector('#dialogboxbody')) {
+    document.getElementById(
+      'dialogboxbody',
+    ).innerHTML = `<h2 id='nameInputTitle'>${dialog}</h2>`;
+    document.getElementById('dialogboxbody').innerHTML
+      += '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
+    document.getElementById('dialogboxbody').innerHTML
+      += '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
 
-  document.querySelector('#mode1').addEventListener('click', () => {
-    takeGameMode(1);
-  });
-  document.querySelector('#mode2').addEventListener('click', () => {
-    takeGameMode(2);
-  });
+    document.querySelector('#mode1').addEventListener('click', () => {
+      takeGameMode(1);
+    });
+    document.querySelector('#mode2').addEventListener('click', () => {
+      takeGameMode(2);
+    });
+  }
 }
 
 function GameMode() {
@@ -533,4 +529,6 @@ document.addEventListener(
   gameType.render('Please select the game mode'),
 );
 
-document.querySelector('.restart').addEventListener('click', restartGame);
+if (document.querySelector('.restart')) {
+  document.querySelector('.restart').addEventListener('click', restartGame);
+}
