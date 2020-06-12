@@ -3,18 +3,9 @@ import hereWeGoSound from '../sound/here_we_go.mp3';
 import monkeySound from '../sound/monkey.mp3';
 import laughSound from '../sound/laugh.mp3';
 
-export const gameBoard = (() => {
-  const cells = ['', '', '', '', '', '', '', '', ''];
-  return { cells };
-})();
+import gameBoard from './board';
 
-export const player = (name, character, rol = 'human') => ({
-  name,
-  character,
-  rol,
-});
-
-export const game = (() => {
+const game = (() => {
   const whoopie = new Audio(whoopieSound);
   const hereWeGo = new Audio(hereWeGoSound);
   const monkey = new Audio(monkeySound);
@@ -46,3 +37,5 @@ export const game = (() => {
     character,
   };
 })();
+
+export default game;
