@@ -1,23 +1,23 @@
-import player from "../src/js/player";
+import player from '../src/js/player';
 
-describe("player", () => {
-  it("should be defined", () => {
+describe('player', () => {
+  it('should be defined', () => {
     expect(player).toBeDefined();
   });
-  it("should return an object with the player structure", () => {
-    const player1 = player("Julian", 1, "computer");
+  it('should return an object with the player structure', () => {
+    const player1 = player('Julian', 1, 'computer');
     expect(player1).toEqual({
-      name: "Julian",
+      name: 'Julian',
       character: 1,
-      rol: "computer",
+      rol: 'computer',
     });
   });
-  it("should return an object with the player structure, by default the rol should be as human", () => {
-    const player1 = player("Julian", 1);
+  it('should return an object with the player structure, by default the rol should be as human', () => {
+    const player1 = player('Julian', 1);
     expect(player1).toEqual({
-      name: "Julian",
+      name: 'Julian',
       character: 1,
-      rol: "human",
+      rol: 'human',
     });
   });
 });
