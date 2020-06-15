@@ -1,4 +1,5 @@
 import player from '../src/js/player';
+import gameBoard from '../src/js/board';
 import game from '../src/js/game';
 
 import {
@@ -176,11 +177,11 @@ describe('displayTie', () => {
 
 describe('isTie', () => {
   it('should return true when there are not more spaces in the board', () => {
-    game.board = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', '💩'];
+    gameBoard.cells = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', '💩'];
     expect(isTie()).toBeTruthy();
   });
   it('should return false when the board still have spaces', () => {
-    game.board = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', ''];
+    gameBoard.cells = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', ''];
     game.currentPlayer = { name: 'gamerName' };
     expect(isTie()).toBeFalsy();
   });
@@ -194,28 +195,28 @@ describe('winnerOrTie', () => {
 
 describe('checkTie', () => {
   it('return true if there are not more spaces in the board', () => {
-    game.board = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', '💩'];
+    gameBoard.cells = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', '💩'];
     expect(checkTie()).toBeTruthy();
   });
   it('return false if there are not more spaces in the board', () => {
-    game.board = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', ''];
+    gameBoard.cells = ['😎', '💩', '😎', '💩', '😎', '😎', '💩', '😎', ''];
     expect(checkTie()).toBeFalsy();
   });
 });
 
 describe('minimax', () => {
   it('should evaluate when the human player is close to win so it will select the best movement', () => {
-    game.board = ['😎', '😎', '', '', '', '', '', '', ''];
-    game.player2 = player('gamerName', '😎', 'human');
-    expect(minimax(game.board, game.player2.character)).toEqual({
+    gameBoard.cells = ['😎', '😎', '', '', '', '', '', '', ''];
+    game.player2 = player.newPlayer('gamerName', '😎', 'human');
+    expect(minimax(gameBoard.cells, game.player2.character)).toEqual({
       evaluation: +10,
       id: 2,
     });
   });
   it('should select the best movement for the computer when computer is close to win', () => {
-    game.board = ['😈', '😈', '', '', '', '', '', '', ''];
-    game.player1 = player('computer', '😈', 'computer');
-    expect(minimax(game.board, game.player1.character)).toEqual({
+    gameBoard.cells = ['😈', '😈', '', '', '', '', '', '', ''];
+    game.player1 = player.newPlayer('computer', '😈', 'computer');
+    expect(minimax(gameBoard.cells, game.player1.character)).toEqual({
       evaluation: -10,
       id: 2,
     });

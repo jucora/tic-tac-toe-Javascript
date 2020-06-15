@@ -1,6 +1,8 @@
+import gameBoard from './board';
 import player from './player';
 import game from './game';
 import initialBox from './initialBox';
+import audio from './audio';
 
 require('../css/style.css');
 require('../css/bootstrap.css');
@@ -31,7 +33,7 @@ export const removeDialogBox = () => {
 
 export const playWhoopie = () => {
   if (game.gameActive) {
-    game.whoopie.play();
+    audio.whoopie.play();
   }
 };
 
@@ -134,7 +136,7 @@ export const setWinner = (cell1, cell2, cell3) => {
   displayWinner(cells, cell1, cell2, cell3);
   game.gameActive = false;
   setTimeout(() => {
-    game.laugh.play();
+    audio.laugh.play();
   }, 500);
 };
 
@@ -156,7 +158,7 @@ export const displayTie = () => {
 };
 
 export const isTie = () => {
-  if (getEmptySpaces(game.board).length === 0) {
+  if (getEmptySpaces(gameBoard.cells).length === 0) {
     displayTie();
     game.gameActive = false;
     game.currentPlayer = null;
@@ -169,12 +171,12 @@ export const isTie = () => {
 
 export const winnerOrTie = () => {
   // let winnerCells = "";
-  if (checkWinner(game.board, game.currentPlayer.character)) {
+  if (checkWinner(gameBoard.cells, game.currentPlayer.character)) {
     // winnerCells = checkWinner(game.board, game.currentPlayer.character);
     setWinner(
-      checkWinner(game.board, game.currentPlayer.character)[1],
-      checkWinner(game.board, game.currentPlayer.character)[2],
-      checkWinner(game.board, game.currentPlayer.character)[3],
+      checkWinner(gameBoard.cells, game.currentPlayer.character)[1],
+      checkWinner(gameBoard.cells, game.currentPlayer.character)[2],
+      checkWinner(gameBoard.cells, game.currentPlayer.character)[3],
     );
   } else {
     game.currentPlayer = game.currentPlayer === game.player1 ? game.player2 : game.player1;
@@ -183,7 +185,7 @@ export const winnerOrTie = () => {
 };
 
 export const checkTie = () => {
-  if (getEmptySpaces(game.board).length === 0) {
+  if (getEmptySpaces(gameBoard.cells).length === 0) {
     return true;
   }
   return false;
@@ -244,7 +246,7 @@ export const minimax = (gameData, PLAYER) => {
 
 export const gameControl = (cell, index) => {
   if (cellContent(cell) === '' && game.gameActive) {
-    game.board[index] = game.currentPlayer.character;
+    gameBoard.cells[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
       drawPlayerMove(cell);
       winnerOrTie();
@@ -252,8 +254,8 @@ export const gameControl = (cell, index) => {
         game.currentPlayer === game.player2
         && game.currentPlayer.rol === 'computer'
       ) {
-        const { id } = minimax(game.board, game.player2.character);
-        game.board[id] = game.currentPlayer.character;
+        const { id } = minimax(gameBoard.cells, game.player2.character);
+        gameBoard.cells[id] = game.currentPlayer.character;
         drawComputerMove(id);
         winnerOrTie();
       }
@@ -272,7 +274,7 @@ export const displayGame = () => {
   game.restart.textContent = 'Restart Game';
   const row = document.createElement('div');
   row.classList.add('row', 'cells');
-  for (let i = 0; i < game.board.length; i += 1) {
+  for (let i = 0; i < gameBoard.cells.length; i += 1) {
     const cell = document.createElement('div');
     cell.classList.add('col-4', 'cell');
     row.appendChild(cell);
@@ -373,17 +375,17 @@ export const checkInput = (name1, index1, name2, index2, mode) => {
   const validName = nameValidation(name1, name2);
   const validCharacter = invalidCharacter(index1, index2, mode);
   if (validName && validCharacter) {
-    game.player1 = player(name1, game.character[index1 - 1]);
+    game.player1 = player.newPlayer(name1, player.character[index1 - 1]);
     if (mode === 2) {
-      game.player2 = player(name2, game.character[index2 - 1]);
+      game.player2 = player.newPlayer(name2, player.character[index2 - 1]);
     } else {
-      game.player2 = player(name2, index2);
+      game.player2 = player.newPlayer(name2, index2);
       game.player2.rol = 'computer';
     }
     removeDialogBox();
-    game.hereWeGo.play();
+    audio.hereWeGo.play();
     setTimeout(() => {
-      game.monkey.play();
+      audio.monkey.play();
     }, 1000);
     game.currentPlayer = game.player1;
     start();
@@ -427,8 +429,10 @@ export function GetUserInfo() {
     document.getElementById('dialogboxbody').innerHTML += `${
       "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>"
       + ' 1)'
-    }${game.character[0]} 2)${game.character[1]} 3)${game.character[2]} 4)${
-      game.character[3]
+    }${player.character[0]} 2)${player.character[1]} 3)${
+      player.character[2]
+    } 4)${
+      player.character[3]
     }</h2><input id='characterPlayerOne'class = 'form-control'>`;
 
     if (mode === 2) {
@@ -440,8 +444,10 @@ export function GetUserInfo() {
       document.getElementById('dialogboxbody').innerHTML += `${
         "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>"
         + ' 1)'
-      }${game.character[0]} 2)${game.character[1]} 3)${game.character[2]} 4)${
-        game.character[3]
+      }${player.character[0]} 2)${player.character[1]} 3)${
+        player.character[2]
+      } 4)${
+        player.character[3]
       }</h2><input id='characterPlayerTwo'class = 'form-control'>`;
     }
     const okButton = document.createElement('BUTTON');
@@ -519,7 +525,7 @@ export const restartGame = () => {
   const cellsContainer = getCells();
   if (cellsContainer) {
     removeGame();
-    game.board = ['', '', '', '', '', '', '', '', ''];
+    gameBoard.cells = ['', '', '', '', '', '', '', '', ''];
     document.getElementById('dialogboxfoot').children[0].remove();
   }
 };
