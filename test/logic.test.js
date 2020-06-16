@@ -1,7 +1,6 @@
 import player from "../src/js/player";
 import gameBoard from "../src/js/board";
 import game from "../src/js/game";
-import audio from "../src/js/audio";
 
 import {
   getInputs,
@@ -24,11 +23,15 @@ import {
   checkTie,
   minimax,
   gameControl,
+  infoContainer,
+  gameTitle,
   displayGame,
   start,
   invalidNumber,
-  nameValidation,
-  invalidCharacter,
+  sameNameValidation,
+  emptyNameValidation,
+  differentIndexValidation,
+  validIndexCharacter,
   checkInput,
   getPlayerOneInput,
   resetInputColor,
@@ -38,8 +41,6 @@ import {
   selectGameMode,
   GameMode,
   gameType,
-  removeGame,
-  restartGame,
 } from "../src/js/logic";
 
 /** ******** DOM SIMULATION ********* */
@@ -117,7 +118,7 @@ describe("playWhoopie", () => {
   it("should be defined", () => {
     expect(playWhoopie).toBeDefined();
   });
-  //pendding audio play test
+  // pendding audio play test
 });
 
 describe("cellContent", () => {
@@ -220,9 +221,9 @@ describe("setWinner", () => {
     expect(setWinner).toBeDefined();
   });
   it("should set the game as inactive", () => {
-    const cell1 = 0,
-      cell2 = 1,
-      cell3 = 2;
+    const cell1 = 0;
+    const cell2 = 1;
+    const cell3 = 2;
     setWinner(cell1, cell2, cell3);
     expect(game.gameActive).toBeFalsy();
   });
@@ -240,6 +241,12 @@ describe("displayTie", () => {
   it("should be defined", () => {
     expect(displayTie).toBeDefined();
   });
+  it("should set the color green to all cells when there is a tie", () => {
+    displayTie();
+    document.querySelectorAll(".cell").forEach((cell) => {
+      expect(cell.style.background).toBe("green");
+    });
+  });
 });
 
 describe("isTie", () => {
@@ -247,6 +254,16 @@ describe("isTie", () => {
   it("should return true when there are not more spaces in the board", () => {
     gameBoard.cells = ["😎", "💩", "😎", "💩", "😎", "😎", "💩", "😎", "💩"];
     expect(isTie()).toBeTruthy();
+  });
+  it("should set the game as inactive", () => {
+    game.gameActive = true;
+    isTie();
+    expect(game.gameActive).toBeFalsy();
+  });
+  it("should set the current player as null", () => {
+    game.currentPlayer = player.newPlayer("Julian", "😎", "human");
+    isTie();
+    expect(game.currentPlayer).toBeNull();
   });
   it("should return false when the board still have spaces", () => {
     gameBoard.cells = ["😎", "💩", "😎", "💩", "😎", "😎", "💩", "😎", ""];
@@ -295,11 +312,25 @@ describe("gameControl", () => {
   it("should be defined", () => {
     expect(gameControl).toBeDefined();
   });
+  // pending
+});
+
+describe("infoContainer", () => {
+  expect(infoContainer).toBeDefined();
+});
+
+describe("gameTitle", () => {
+  expect(gameTitle).toBeDefined();
 });
 
 describe("displayGame", () => {
   it("should be defined", () => {
     expect(displayGame).toBeDefined();
+  });
+  it("should display the current user when the game starts", () => {
+    game.currentPlayer = player.newPlayer("Julian", "😎", "human");
+    displayGame();
+    expect(game.info.textContent).toBe("Julian is playing!");
   });
 });
 
@@ -307,37 +338,89 @@ describe("start", () => {
   it("should be defined", () => {
     expect(start).toBeDefined();
   });
+  it("should set the game as active", () => {
+    game.gameActive = false;
+    start();
+    expect(game.gameActive).toBeTruthy();
+  });
 });
 
 describe("invalidNumber", () => {
   it("should be defined", () => {
     expect(invalidNumber).toBeDefined();
   });
+  it("should return true if an input value is not an integer", () => {
+    const index = "a";
+    expect(invalidNumber(index)).toBeTruthy();
+  });
+  it("should return false if an input value is an integer", () => {
+    const index = 4;
+    expect(invalidNumber(index)).toBeFalsy();
+  });
 });
 
-describe("nameValidation", () => {
+describe("sameNameValidation", () => {
   it("should return true if players names are present and are different", () => {
     const playerOneName = getPlayersInputs()[0];
     const playerTwoName = getPlayersInputs()[2];
-    expect(nameValidation(playerOneName, playerTwoName)).toBeTruthy();
+    expect(sameNameValidation(playerOneName, playerTwoName)).toBeTruthy();
+  });
+
+  it("should return false if both players names are equal", () => {
+    fakeDom.inputsSameValues();
+    const playerOneName = getPlayersInputs()[0];
+    const playerTwoName = getPlayersInputs()[2];
+    expect(sameNameValidation(playerOneName, playerTwoName)).toBeFalsy();
+  });
+});
+
+describe("emptyNameValidation", () => {
+  it("should be defined", () => {
+    expect(emptyNameValidation).toBeDefined();
   });
   it("should return false if both players names are not present", () => {
     fakeDom.emptyInputs();
     const playerOneName = getPlayersInputs()[0];
     const playerTwoName = getPlayersInputs()[2];
-    expect(nameValidation(playerOneName, playerTwoName)).toBeFalsy();
-  });
-  it("should return false if both players names are equal", () => {
-    fakeDom.inputsSameValues();
-    const playerOneName = getPlayersInputs()[0];
-    const playerTwoName = getPlayersInputs()[2];
-    expect(nameValidation(playerOneName, playerTwoName)).toBeFalsy();
+    expect(emptyNameValidation(playerOneName, playerTwoName)).toBeFalsy();
   });
 });
 
-describe("invalidCharacter", () => {
+describe("differentIndexValidation", () => {
+  it("should return false if Player1 character is equal than Player2 character", () => {
+    fakeDom.inputsDifferentValues();
+    const index1 = 1;
+    const index2 = 1;
+    expect(differentIndexValidation(index1, index2)).toBeFalsy();
+  });
+});
+
+describe("validIndexCharacter", () => {
   it("should be defined", () => {
-    expect(invalidCharacter).toBeDefined();
+    expect(validIndexCharacter).toBeDefined();
+  });
+  it("should return false if the user selects a string as a character", () => {
+    fakeDom.inputsDifferentValues();
+    const index = "a";
+    expect(validIndexCharacter(index)).toBeFalsy();
+  });
+  it("should return false if the user selects a value less than 1", () => {
+    fakeDom.inputsDifferentValues();
+    const index = 0;
+    expect(validIndexCharacter(index)).toBeFalsy();
+  });
+  it("should return false if the user selects a value greater than 4", () => {
+    fakeDom.inputsDifferentValues();
+    const index = 5;
+    expect(validIndexCharacter(index)).toBeFalsy();
+  });
+
+  it("should return true if Player1 and Player2 passed all the last validations", () => {
+    fakeDom.inputsDifferentValues();
+    const index1 = 1;
+    const index2 = 25;
+    const mode = 2;
+    expect(validIndexCharacter(index1, index2, mode)).toBeFalsy();
   });
 });
 
@@ -398,16 +481,5 @@ describe("GameMode", () => {
 describe("gameType", () => {
   it("should be defined", () => {
     expect(gameType).toBeDefined();
-  });
-});
-
-describe("removeGame", () => {
-  it("should be defined", () => {
-    expect(removeGame).toBeDefined();
-  });
-});
-describe("restartGame", () => {
-  it("should be defined", () => {
-    expect(restartGame).toBeDefined();
   });
 });
