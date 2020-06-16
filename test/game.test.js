@@ -10,6 +10,6 @@ describe('game', () => {
     expect(game.currentPlayer).toBe('');
   });
   it('should be inactive at the beginning', () => {
-    expect(game.gameActive).toBe(false);
+    expect(game.gameActive).toBeFalsy();
   });
 });

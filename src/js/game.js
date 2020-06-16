@@ -4,8 +4,8 @@ const game = (() => {
   const currentPlayer = '';
 
   const gameActive = false;
-  const info = document.querySelector('#info');
-  const restart = document.querySelector('.restart');
+  const info = '';
+  const restart = '';
 
   return {
     player1,

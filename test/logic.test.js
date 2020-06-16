@@ -87,11 +87,25 @@ describe('validInput', () => {
   it('should be defined', () => {
     expect(validInput).toBeDefined();
   });
+  it('should display a message when an input validation error occurs and change the input background', () => {
+    const text = 'namePlayerOneTitle';
+    const input = 'playerOneName';
+    const message = "Name can't be empty!";
+    validInput(text, input, message);
+    expect(document.getElementById(text).textContent).toBe(message);
+    expect(document.getElementById(input).style.background).toEqual(
+      'rgb(247, 128, 112)',
+    );
+  });
 });
 
 describe('removeDialogBox', () => {
   it('should be defined', () => {
     expect(removeDialogBox).toBeDefined();
+  });
+  it('', () => {
+    removeDialogBox();
+    expect(document.getElementById('dialogbox').style.display).toBe('none');
   });
 });
 

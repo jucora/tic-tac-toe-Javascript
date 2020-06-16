@@ -269,7 +269,34 @@ export const gameControl = (cell, index) => {
   }
 };
 
+export const infoContainer = () => {
+  const infoContainer = document.createElement('div');
+  infoContainer.classList.add('info-container');
+  const info = document.createElement('div');
+  info.setAttribute('id', 'info');
+  const restart = document.createElement('div');
+  restart.classList.add('restart');
+  infoContainer.appendChild(info);
+  infoContainer.appendChild(restart);
+  document.querySelector('.container').appendChild(infoContainer);
+  // <div class="info-container">
+  //       <div id="info"></div>
+  //       <div class="restart"></div>
+  //     </div>
+};
+
+export const gameTitle = () => {
+  const title = document.createElement('h1');
+  title.textContent = 'Tic Tac Toe Game';
+  title.classList.add('title');
+  document.querySelector('.container').appendChild(title);
+};
+
 export const displayGame = () => {
+  gameTitle();
+  infoContainer();
+  game.info = document.querySelector('#info');
+  game.restart = document.querySelector('.restart');
   game.info.textContent = `${game.currentPlayer.name} is playing!`;
   game.restart.textContent = 'Restart Game';
   const row = document.createElement('div');
