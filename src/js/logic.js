@@ -1,19 +1,17 @@
-import gameBoard from './board';
-import player from './player';
-import game from './game';
-import initialBox from './initialBox';
-import audio from './audio';
+import gameBoard from "./board";
+import player from "./player";
+import game from "./game";
+import initialBox from "./initialBox";
+import audio from "./audio";
 
-require('../css/style.css');
-require('../css/bootstrap.css');
-
-const checkInputPlayerTwo = () => document.getElementById('playerTwoName');
+require("../css/style.css");
+require("../css/bootstrap.css");
 
 export const getInputs = () => [
-  document.getElementById('playerOneName'),
-  document.getElementById('characterPlayerOne'),
-  document.getElementById('playerTwoName'),
-  document.getElementById('characterPlayerTwo'),
+  document.getElementById("playerOneName"),
+  document.getElementById("characterPlayerOne"),
+  document.getElementById("playerTwoName"),
+  document.getElementById("characterPlayerTwo"),
 ];
 
 export const getPlayersInputs = () => {
@@ -23,12 +21,12 @@ export const getPlayersInputs = () => {
 
 export const validInput = (text, input, message) => {
   document.getElementById(text).textContent = message;
-  document.getElementById(input).style.background = '#F78070';
+  document.getElementById(input).style.background = "#F78070";
 };
 
 export const removeDialogBox = () => {
-  document.getElementById('dialogbox').style.display = 'none';
-  document.getElementById('dialogoverlay').style.display = 'none';
+  document.getElementById("dialogbox").style.display = "none";
+  document.getElementById("dialogoverlay").style.display = "none";
 };
 
 export const playWhoopie = () => {
@@ -44,71 +42,72 @@ export const drawPlayerMove = (cell) => {
 };
 
 export const drawComputerMove = (id) => {
-  document.querySelector('.cells').children[id].textContent = game.currentPlayer.character;
+  document.querySelector(".cells").children[id].textContent =
+    game.currentPlayer.character;
 };
 
 export const checkWinner = (board, currentPlayer) => {
   if (
-    board[0] === board[1]
-    && board[1] === board[2]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[1] &&
+    board[1] === board[2] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 1, 2];
   }
   if (
-    board[3] === board[4]
-    && board[4] === board[5]
-    && board[3] === currentPlayer
-    && currentPlayer !== ''
+    board[3] === board[4] &&
+    board[4] === board[5] &&
+    board[3] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 3, 4, 5];
   }
   if (
-    board[6] === board[7]
-    && board[7] === board[8]
-    && board[6] === currentPlayer
-    && currentPlayer !== ''
+    board[6] === board[7] &&
+    board[7] === board[8] &&
+    board[6] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 6, 7, 8];
   }
   if (
-    board[0] === board[3]
-    && board[3] === board[6]
-    && board[0] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[3] &&
+    board[3] === board[6] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 3, 6];
   }
   if (
-    board[1] === board[4]
-    && board[4] === board[7]
-    && board[1] === currentPlayer
-    && currentPlayer !== ''
+    board[1] === board[4] &&
+    board[4] === board[7] &&
+    board[1] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 1, 4, 7];
   }
   if (
-    board[2] === board[5]
-    && board[5] === board[8]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[2] === board[5] &&
+    board[5] === board[8] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 2, 5, 8];
   }
   if (
-    board[0] === board[4]
-    && board[4] === board[8]
-    && board[0] === currentPlayer
-    && currentPlayer !== ''
+    board[0] === board[4] &&
+    board[4] === board[8] &&
+    board[0] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 0, 4, 8];
   }
   if (
-    board[2] === board[4]
-    && board[4] === board[6]
-    && board[2] === currentPlayer
-    && currentPlayer !== ''
+    board[2] === board[4] &&
+    board[4] === board[6] &&
+    board[2] === currentPlayer &&
+    currentPlayer !== ""
   ) {
     return [true, 2, 4, 6];
   }
@@ -121,12 +120,12 @@ export const gameInfo = (message) => {
 
 export const displayWinner = (cells, cell1, cell2, cell3) => {
   gameInfo(`${game.currentPlayer.name} is the winner`);
-  cells.children[cell1].style.background = 'green';
-  cells.children[cell2].style.background = 'green';
-  cells.children[cell3].style.background = 'green';
+  cells.children[cell1].style.background = "green";
+  cells.children[cell2].style.background = "green";
+  cells.children[cell3].style.background = "green";
 };
 
-export const getCells = () => document.querySelector('.cells');
+export const getCells = () => document.querySelector(".cells");
 
 export const setWinner = (cell1, cell2, cell3) => {
   const cells = getCells();
@@ -148,9 +147,9 @@ export const getEmptySpaces = (gameData) => {
 };
 
 export const displayTie = () => {
-  gameInfo('TIE: No winners this time!');
-  document.querySelectorAll('.cell').forEach((cell) => {
-    cell.style.background = 'green';
+  gameInfo("TIE: No winners this time!");
+  document.querySelectorAll(".cell").forEach((cell) => {
+    cell.style.background = "green";
   });
 };
 
@@ -161,7 +160,8 @@ export const isTie = () => {
     game.currentPlayer = null;
     return true;
   }
-  game.currentPlayer = game.currentPlayer === game.player1 ? game.player2 : game.player1;
+  game.currentPlayer =
+    game.currentPlayer === game.player1 ? game.player2 : game.player1;
   gameInfo(`${game.currentPlayer.name} is Playing!`);
   return false;
 };
@@ -171,7 +171,7 @@ export const winnerOrTie = () => {
     setWinner(
       checkWinner(gameBoard.cells, game.currentPlayer.character)[1],
       checkWinner(gameBoard.cells, game.currentPlayer.character)[2],
-      checkWinner(gameBoard.cells, game.currentPlayer.character)[3],
+      checkWinner(gameBoard.cells, game.currentPlayer.character)[3]
     );
   } else {
     isTie();
@@ -239,14 +239,14 @@ export const minimax = (gameData, PLAYER) => {
 };
 
 export const gameControl = (cell, index) => {
-  if (cellContent(cell) === '' && game.gameActive) {
+  if (cellContent(cell) === "" && game.gameActive) {
     gameBoard.cells[index] = game.currentPlayer.character;
     if (game.currentPlayer === game.player1) {
       drawPlayerMove(cell);
       winnerOrTie();
       if (
-        game.currentPlayer === game.player2
-        && game.currentPlayer.rol === 'computer'
+        game.currentPlayer === game.player2 &&
+        game.currentPlayer.rol === "computer"
       ) {
         const { id } = minimax(gameBoard.cells, game.player2.character);
         gameBoard.cells[id] = game.currentPlayer.character;
@@ -254,8 +254,8 @@ export const gameControl = (cell, index) => {
         winnerOrTie();
       }
     } else if (
-      game.currentPlayer === game.player2
-      && game.currentPlayer.rol === 'human'
+      game.currentPlayer === game.player2 &&
+      game.currentPlayer.rol === "human"
     ) {
       drawPlayerMove(cell);
       winnerOrTie();
@@ -264,44 +264,44 @@ export const gameControl = (cell, index) => {
 };
 
 export const infoContainer = () => {
-  const infoContainer = document.createElement('div');
-  infoContainer.classList.add('info-container');
-  const info = document.createElement('div');
-  info.setAttribute('id', 'info');
-  const restart = document.createElement('div');
-  restart.classList.add('restart');
-  restart.textContent = 'Restart Game';
-  restart.addEventListener('click', () => {
+  const infoContainer = document.createElement("div");
+  infoContainer.classList.add("info-container");
+  const info = document.createElement("div");
+  info.setAttribute("id", "info");
+  const restart = document.createElement("div");
+  restart.classList.add("restart");
+  restart.textContent = "Restart Game";
+  restart.addEventListener("click", () => {
     document.location.reload();
   });
   infoContainer.appendChild(info);
   infoContainer.appendChild(restart);
-  document.querySelector('.container').appendChild(infoContainer);
+  document.querySelector(".container").appendChild(infoContainer);
 };
 
 export const gameTitle = () => {
-  const title = document.createElement('h1');
-  title.textContent = 'Tic Tac Toe Game';
-  title.classList.add('title');
-  document.querySelector('.container').appendChild(title);
+  const title = document.createElement("h1");
+  title.textContent = "Tic Tac Toe Game";
+  title.classList.add("title");
+  document.querySelector(".container").appendChild(title);
 };
 
 export const displayGame = () => {
   gameTitle();
   infoContainer();
-  game.info = document.querySelector('#info');
+  game.info = document.querySelector("#info");
   game.info.textContent = `${game.currentPlayer.name} is playing!`;
-  const row = document.createElement('div');
-  row.classList.add('row', 'cells');
+  const row = document.createElement("div");
+  row.classList.add("row", "cells");
   for (let i = 0; i < gameBoard.cells.length; i += 1) {
-    const cell = document.createElement('div');
-    cell.classList.add('col-4', 'cell');
+    const cell = document.createElement("div");
+    cell.classList.add("col-4", "cell");
     row.appendChild(cell);
   }
-  document.querySelector('.container').appendChild(row);
+  document.querySelector(".container").appendChild(row);
 
-  document.querySelectorAll('.cell').forEach((cell, index) => {
-    cell.addEventListener('click', () => {
+  document.querySelectorAll(".cell").forEach((cell, index) => {
+    cell.addEventListener("click", () => {
       playWhoopie();
       gameControl(cell, index);
     });
@@ -316,16 +316,16 @@ export const start = () => {
 export const invalidNumber = (index) => !Number.isInteger(parseInt(index, 10));
 
 export const sameNameValidation = (name1, name2) => {
-  if (name1 === name2 && name1 !== '') {
+  if (name1 === name2 && name1 !== "") {
     validInput(
-      'namePlayerOneTitle',
-      'playerOneName',
-      'Names have to be different',
+      "namePlayerOneTitle",
+      "playerOneName",
+      "Names have to be different"
     );
     validInput(
-      'namePlayerTwoTitle',
-      'playerTwoName',
-      'Names have to be different',
+      "namePlayerTwoTitle",
+      "playerTwoName",
+      "Names have to be different"
     );
     return false;
   }
@@ -333,12 +333,12 @@ export const sameNameValidation = (name1, name2) => {
 };
 
 export const emptyNameValidation = (name1, name2) => {
-  if (name1 === '' || name2 === '') {
-    if (name1 === '') {
-      validInput('namePlayerOneTitle', 'playerOneName', "Name can't be empty!");
+  if (name1 === "" || name2 === "") {
+    if (name1 === "") {
+      validInput("namePlayerOneTitle", "playerOneName", "Name can't be empty!");
     }
-    if (name2 === '') {
-      validInput('namePlayerTwoTitle', 'playerTwoName', "Name can't be empty!");
+    if (name2 === "") {
+      validInput("namePlayerTwoTitle", "playerTwoName", "Name can't be empty!");
     }
     return false;
   }
@@ -346,16 +346,16 @@ export const emptyNameValidation = (name1, name2) => {
 };
 
 export const differentIndexValidation = (index1, index2) => {
-  if (index1 === index2 && index1 !== '') {
+  if (index1 === index2 && index1 !== "") {
     validInput(
-      'characterPlayerOneTitle',
-      'characterPlayerOne',
-      'Please select a valid character between 1 to 4',
+      "characterPlayerOneTitle",
+      "characterPlayerOne",
+      "Please select a valid character between 1 to 4"
     );
     validInput(
-      'characterPlayerTwoTitle',
-      'characterPlayerTwo',
-      'Please select a valid character between 1 to 4',
+      "characterPlayerTwoTitle",
+      "characterPlayerTwo",
+      "Please select a valid character between 1 to 4"
     );
     return false;
   }
@@ -364,34 +364,34 @@ export const differentIndexValidation = (index1, index2) => {
 
 export const validIndexCharacter = (index1, index2, mode) => {
   if (
-    invalidNumber(index1)
-    || index1 < 1
-    || index1 > 4
-    || index1.length > 1
-    || (mode === 2
-      && (invalidNumber(index2) || index2 < 1 || index2 > 4 || index2.length > 1))
+    invalidNumber(index1) ||
+    index1 < 1 ||
+    index1 > 4 ||
+    index1.length > 1 ||
+    (mode === 2 &&
+      (invalidNumber(index2) || index2 < 1 || index2 > 4 || index2.length > 1))
   ) {
     if (
-      invalidNumber(index1)
-      || index1 < 1
-      || index1 > 4
-      || index1.length > 1
+      invalidNumber(index1) ||
+      index1 < 1 ||
+      index1 > 4 ||
+      index1.length > 1
     ) {
       validInput(
-        'characterPlayerOneTitle',
-        'characterPlayerOne',
-        'Please select a valid character between 1 to 4',
+        "characterPlayerOneTitle",
+        "characterPlayerOne",
+        "Please select a valid character between 1 to 4"
       );
       return false;
     }
     if (
-      mode === 2
-      && (invalidNumber(index2) || index2 < 1 || index2 > 4 || index2.length > 1)
+      mode === 2 &&
+      (invalidNumber(index2) || index2 < 1 || index2 > 4 || index2.length > 1)
     ) {
       validInput(
-        'characterPlayerTwoTitle',
-        'characterPlayerTwo',
-        'Please select a valid character between 1 to 4',
+        "characterPlayerTwoTitle",
+        "characterPlayerTwo",
+        "Please select a valid character between 1 to 4"
       );
       return false;
     }
@@ -406,7 +406,7 @@ export const setPlayers = (name1, index1, name2, index2, mode) => {
     game.player2 = player.newPlayer(name2, player.character[index2 - 1]);
   } else {
     game.player2 = player.newPlayer(name2, index2);
-    game.player2.rol = 'computer';
+    game.player2.rol = "computer";
   }
 };
 
@@ -427,8 +427,8 @@ export const checkInput = (name1, index1, name2, index2, mode) => {
   }
   let validCharacter = false;
   if (
-    validIndexCharacter(index1, index2, mode)
-    && differentIndexValidation(index1, index2)
+    validIndexCharacter(index1, index2, mode) &&
+    differentIndexValidation(index1, index2)
   ) {
     validCharacter = true;
   }
@@ -439,26 +439,41 @@ export const checkInput = (name1, index1, name2, index2, mode) => {
 };
 
 export const getPlayerOneInput = () => {
-  const playerOneName = document.getElementById('playerOneName').value;
-  const playerOneCharacter = document.getElementById('characterPlayerOne')
+  const playerOneName = document.getElementById("playerOneName").value;
+  const playerOneCharacter = document.getElementById("characterPlayerOne")
     .value;
   return [playerOneName, playerOneCharacter];
-};
-
-export const resetInputColor = (inp) => {
-  if (inp) {
-    inp.style.background = '#fff';
-  }
 };
 
 export const setDialogDetail = (mode) => {
   let dialogDetail;
   if (mode === 1) {
-    dialogDetail = ' name';
+    dialogDetail = " name";
   } else {
-    dialogDetail = ' 1 name';
+    dialogDetail = " 1 name";
   }
   return dialogDetail;
+};
+
+export const opponentController = () => {
+  if (getInputs()[2]) {
+    const playerOneName = getPlayersInputs()[0];
+    const playerOneCharacter = getPlayersInputs()[1];
+    const playerTwoName = getPlayersInputs()[2];
+    const playerTwoCharacter = getPlayersInputs()[3];
+
+    checkInput(
+      playerOneName,
+      playerOneCharacter,
+      playerTwoName,
+      playerTwoCharacter,
+      2
+    );
+  } else {
+    const playerOneName = getPlayerOneInput()[0];
+    const playerOneCharacter = getPlayerOneInput()[1];
+    checkInput(playerOneName, playerOneCharacter, "Computer", "😈", 1);
+  }
 };
 
 export function GetUserInfo() {
@@ -467,14 +482,14 @@ export function GetUserInfo() {
     const dialogDetail = setDialogDetail(mode);
 
     document.getElementById(
-      'dialogboxbody',
+      "dialogboxbody"
     ).innerHTML = `<h2 id='namePlayerOneTitle'>${dialog}${dialogDetail}</h2>`;
 
-    document.getElementById('dialogboxbody').innerHTML
-      += '<br><input id="playerOneName" class = "form-control">';
-    document.getElementById('dialogboxbody').innerHTML += `${
-      "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>"
-      + ' 1)'
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><input id="playerOneName" class = "form-control">';
+    document.getElementById("dialogboxbody").innerHTML += `${
+      "<br><h2 id='characterPlayerOneTitle'>Please select your character</h2><h2>" +
+      " 1)"
     }${player.character[0]} 2)${player.character[1]} 3)${
       player.character[2]
     } 4)${
@@ -483,72 +498,57 @@ export function GetUserInfo() {
 
     if (mode === 2) {
       document.getElementById(
-        'dialogboxbody',
+        "dialogboxbody"
       ).innerHTML += `<br><hr><br><h2 id='namePlayerTwoTitle'>${dialog} 2 name</h2>`;
-      document.getElementById('dialogboxbody').innerHTML
-        += '<br><input id="playerTwoName" class = "form-control">';
-      document.getElementById('dialogboxbody').innerHTML += `${
-        "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>"
-        + ' 1)'
+      document.getElementById("dialogboxbody").innerHTML +=
+        '<br><input id="playerTwoName" class = "form-control">';
+      document.getElementById("dialogboxbody").innerHTML += `${
+        "<br><h2 id='characterPlayerTwoTitle'>Please select your character</h2><h2>" +
+        " 1)"
       }${player.character[0]} 2)${player.character[1]} 3)${
         player.character[2]
       } 4)${
         player.character[3]
       }</h2><input id='characterPlayerTwo'class = 'form-control'>`;
     }
-    const okButton = document.createElement('BUTTON');
-    okButton.innerHTML = 'OK';
-    okButton.classList.add('btn', 'btn-primary', 'form-control');
-    okButton.addEventListener('click', () => {
+    const okButton = document.createElement("BUTTON");
+    okButton.innerHTML = "OK";
+    okButton.classList.add("btn", "btn-primary", "form-control");
+    okButton.addEventListener("click", () => {
       this.ok();
     });
-    document.getElementById('dialogboxfoot').appendChild(okButton);
+    document.getElementById("dialogboxfoot").appendChild(okButton);
   };
   this.ok = () => {
     const inputs = getInputs();
     inputs.forEach((inp) => {
-      resetInputColor(inp);
+      if (inp) {
+        inp.style.background = "#fff";
+      }
     });
-    if (checkInputPlayerTwo()) {
-      const playerOneName = getPlayersInputs()[0];
-      const playerOneCharacter = getPlayersInputs()[1];
-      const playerTwoName = getPlayersInputs()[2];
-      const playerTwoCharacter = getPlayersInputs()[3];
-
-      checkInput(
-        playerOneName,
-        playerOneCharacter,
-        playerTwoName,
-        playerTwoCharacter,
-        2,
-      );
-    } else {
-      const playerOneName = getPlayerOneInput()[0];
-      const playerOneCharacter = getPlayerOneInput()[1];
-      checkInput(playerOneName, playerOneCharacter, 'Computer', '😈', 1);
-    }
+    opponentController();
   };
 }
 
 export const takeGameMode = (mode) => {
   const userInfo = new GetUserInfo();
-  userInfo.render('Player', mode);
+  userInfo.render("Player", mode);
 };
 
 export const selectGameMode = (dialog) => {
-  if (document.querySelector('#dialogboxbody')) {
+  if (document.querySelector("#dialogboxbody")) {
     document.getElementById(
-      'dialogboxbody',
+      "dialogboxbody"
     ).innerHTML = `<h2 id='nameInputTitle'>${dialog}</h2>`;
-    document.getElementById('dialogboxbody').innerHTML
-      += '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
-    document.getElementById('dialogboxbody').innerHTML
-      += '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode1" class = "btn btn-primary"> Player vs Computer</button><br>';
+    document.getElementById("dialogboxbody").innerHTML +=
+      '<br><button id="mode2" class = "btn btn-primary"> Player vs Player</button>';
 
-    document.querySelector('#mode1').addEventListener('click', () => {
+    document.querySelector("#mode1").addEventListener("click", () => {
       takeGameMode(1);
     });
-    document.querySelector('#mode2').addEventListener('click', () => {
+    document.querySelector("#mode2").addEventListener("click", () => {
       takeGameMode(2);
     });
   }
@@ -563,6 +563,6 @@ export function GameMode() {
 export const gameType = new GameMode();
 
 document.addEventListener(
-  'DOMContentLoaded',
-  gameType.render('Please select the game mode'),
+  "DOMContentLoaded",
+  gameType.render("Please select the game mode")
 );
