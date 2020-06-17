@@ -400,8 +400,27 @@ export const validIndexCharacter = (index1, index2, mode) => {
   return true;
 };
 
+export const setPlayers = (name1, index1, name2, index2, mode) => {
+  game.player1 = player.newPlayer(name1, player.character[index1 - 1]);
+  if (mode === 2) {
+    game.player2 = player.newPlayer(name2, player.character[index2 - 1]);
+  } else {
+    game.player2 = player.newPlayer(name2, index2);
+    game.player2.rol = 'computer';
+  }
+};
+
+export const getReady = () => {
+  removeDialogBox();
+  audio.hereWeGo.play();
+  setTimeout(() => {
+    audio.monkey.play();
+  }, 1000);
+  game.currentPlayer = game.player1;
+  start();
+};
+
 export const checkInput = (name1, index1, name2, index2, mode) => {
-  // const validName = nameValidation(name1, name2);
   let validName = false;
   if (emptyNameValidation(name1, name2) && sameNameValidation(name1, name2)) {
     validName = true;
@@ -414,20 +433,8 @@ export const checkInput = (name1, index1, name2, index2, mode) => {
     validCharacter = true;
   }
   if (validName && validCharacter) {
-    game.player1 = player.newPlayer(name1, player.character[index1 - 1]);
-    if (mode === 2) {
-      game.player2 = player.newPlayer(name2, player.character[index2 - 1]);
-    } else {
-      game.player2 = player.newPlayer(name2, index2);
-      game.player2.rol = 'computer';
-    }
-    removeDialogBox();
-    audio.hereWeGo.play();
-    setTimeout(() => {
-      audio.monkey.play();
-    }, 1000);
-    game.currentPlayer = game.player1;
-    start();
+    setPlayers(name1, index1, name2, index2, mode);
+    getReady();
   }
 };
 
