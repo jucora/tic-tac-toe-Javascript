@@ -34,7 +34,7 @@ const initialBox = () => {
   const dialogbox = document.getElementById('dialogbox');
   dialogoverlay.style.display = 'block';
   dialogoverlay.style.height = `${winH}px`;
-  dialogbox.style.left = `${winW / 2 - 550 * 0.5}px`;
+  dialogbox.style.left = `${(winW / 2) - (550 * 0.5)}px`;
   dialogbox.style.top = '100px';
   dialogbox.style.display = 'block';
   document.getElementById('dialogboxhead').innerHTML = 'Welcome to the Tic Tac Toe Game!';
