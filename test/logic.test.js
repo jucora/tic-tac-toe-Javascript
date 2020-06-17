@@ -45,6 +45,10 @@ import {
   gameType,
 } from "../src/js/logic";
 
+window.HTMLMediaElement.prototype.play = () => {
+  /* do nothing */
+};
+
 /** ******** DOM SIMULATION ********* */
 
 import fakeDom from "./testHelpers";
@@ -120,7 +124,6 @@ describe("playWhoopie", () => {
   it("should be defined", () => {
     expect(playWhoopie).toBeDefined();
   });
-  // pendding audio play test
 });
 
 describe("cellContent", () => {
